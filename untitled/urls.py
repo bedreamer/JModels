@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.show_editor_page),
     path('preview/', views.show_preview_page),
+    path('model/<int:id>/change/', views.show_change_model_page),
     path('json/', views.edit_models),
 ]

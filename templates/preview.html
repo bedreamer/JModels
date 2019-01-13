@@ -45,34 +45,19 @@
       ;
     });
 
-        $.getJSON("/json/", '', function (data, status, xhr) {
-              var painter = new JPaintbord('paint', 1000, 600, data);
-              painter.begin();
-              painter.render();
-              painter.update();
-        });
+    $.getJSON("/json/", '', function (data, status, xhr) {
+          var painter = new JPaintbord('paint', 1000, 600, data);
+          painter.begin();
+          painter.render();
+          painter.update();
+    });
 
   </script>
 </head>
 <body>
 
 <div class="ui inverted fluid menu">
-  <div class="header item">Brand</div>
-  <a class="active item">Link</a>
-  <a class="item">Link</a>
-  <div class="ui dropdown item">
-    Dropdown
-    <i class="dropdown icon"></i>
-    <div class="menu">
-      <div class="item">Action</div>
-      <div class="item">Another Action</div>
-      <div class="item">Something else here</div>
-      <div class="divider"></div>
-      <div class="item">Separated Link</div>
-      <div class="divider"></div>
-      <div class="item">One more separated link</div>
-    </div>
-  </div>
+  <div class="header item">JModels-预览</div>
   <div class="right menu">
     <a class="item green button" href="/">
         <button class="ui button red">

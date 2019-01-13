@@ -3,6 +3,8 @@ from django.http import *
 import json
 import codecs
 
+filename = 'save.json'
+
 
 # Create your views here.
 def show_editor_page(request):
@@ -14,7 +16,6 @@ def show_preview_page(request):
 
 
 def edit_models(request):
-    filename = 'save.json'
 
     if request.method == 'GET':
         try:
@@ -29,3 +30,10 @@ def edit_models(request):
 
         return JsonResponse({"status": "ok"})
 
+
+def show_change_model_page(request, id):
+    with codecs.open(filename, encoding='utf8') as file:
+        all_models = json.loads(file.read())
+        model = [model for model in all_models['models'] if model['id'] == id][0]
+
+    return render(request, "model_change_form.html", context={"model": model, "all_model": all_models})

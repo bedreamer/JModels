@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>编辑</title>
+  <title>JModels-编辑</title>
 
   <!--- Site CSS -->
   <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.css">
@@ -58,11 +58,15 @@
         });
 
         $("#menu_new_model").click(function () {
-            $('#id_model_model').modal('show');
+            document.ondblclick = function (ev) {
+                document.ondblclick = null;
+                editor.create_model(ev.offsetX, ev.offsetY, 80, 80, {});
+                editor.update();
+                console.info(ev);
+            }
         });
 
         $("#menu_new_link").click(function () {
-            $('#id_model_link').modal('show');
         });
 
         $("#id_create_confirm").click(function () {
@@ -79,8 +83,11 @@
             $('#id_model_link').modal('hide');
             var begin = $("input[name=begin]").val();
             var end = $("input[name=end]").val();
-            editor.create_link(begin, end, {});
-            editor.update();
+
+            if ( begin !== end ) {
+                editor.create_link(begin, end, {});
+                editor.update();
+            }
         });
 
     });
@@ -89,18 +96,14 @@
 <body>
 
 <div class="ui fluid menu">
-  <div class="header item">Brand</div>
+  <div class="header item">JModels-编辑</div>
   <div class="ui dropdown item">
     模型
     <i class="dropdown icon"></i>
     <div class="menu">
       <div class="item" id="menu_new_model">新建模型</div>
       <div class="item" id="menu_new_link">新建连接</div>
-      <div class="item">Something else here</div>
-      <div class="divider"></div>
-      <div class="item">Separated Link</div>
-      <div class="divider"></div>
-      <div class="item">One more separated link</div>
+      <div class="item" id="menu_new_segment">新建线段</div>
     </div>
   </div>
   <div class="right menu">
@@ -130,10 +133,10 @@
           <input type="number" name="offset_y" placeholder="偏移-Y">
         </div>
         <div class="ui input focus">
-          <input type="number" name="width" placeholder="宽">
+          <input type="number" name="width" placeholder="宽" value="80">
         </div>
         <div class="ui input focus">
-          <input type="number" name="height" placeholder="高">
+          <input type="number" name="height" placeholder="高" value="80">
         </div>
         <div class="ui button primary" id="id_create_confirm">
             <i class="plus icon"></i>

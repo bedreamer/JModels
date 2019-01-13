@@ -11,6 +11,8 @@
  *   注意:
  *      加载顺序:
  *          model --> anchors --> link
+ *      渲染顺序
+ *          link  --> anchor --> model
  *
  *  版本记录
  *  v1.0
@@ -33,20 +35,25 @@
  * @param model: 所属模型
  * @param x_offset: 当前锚点在模型的中心点的x偏移值
  * @param y_offset: 当前锚点在模型的中心点的y偏移值
- * @param name: 锚点名称, left, top, right, bottom, center
  * @param style: 当前锚点的风格定义结构
  * */
-var JAnchor = function (id, model, x_offset, y_offset, name, style) {
+var JAnchor = function (id, model, x_offset, y_offset, style) {
     this.id = id;
     this.model = model;
-    this.name = name;
-    model.anchors[name] = this;
+
+    if ( style === undefined ) style = {};
+    if ( style.name === undefined ) style.name = 'default';
+
+    model.anchors[style.name] = this;
 
     this.x_offset = x_offset;
     this.y_offset = y_offset;
-    this.height = 10;
-    this.width = 10;
+    this.height = 6;
+    this.width = 6;
     this.style = style;
+
+    this.x = model.x_offset + this.x_offset - this.width/2;
+    this.y = model.y_offset + this.y_offset - this.height/2;
 
     return this;
 };
@@ -54,13 +61,6 @@ var JAnchor = function (id, model, x_offset, y_offset, name, style) {
  * 渲染函数
  * */
 JAnchor.prototype.render = function (ctx) {
-    if ( this.x === undefined || this.y === undefined ) {
-        this.x = this.model.x_offset + this.x_offset - this.width/2;
-        this.y = this.model.y_offset + this.y_offset - this.height/2;
-    }
-
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
-    ctx.fillText(this.id, this.x, this.y);
 };
 
 
@@ -126,10 +126,22 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
     this.y = this.y_offset - height/2;
     this.width = width;
     this.height = height;
+
+    if ( style === undefined ) style = {};
+    if ( style.name === undefined ) style.name = 'model_' + id;
+    if ( style.showed === undefined ) style.showed = true;
+
     this.style = style;
+
+    if ( style.backgroud_image !== undefined ) {
+        this.image = this.bord.load_image(style.backgroud_image);
+    } else {
+        this.image = undefined;
+    }
 
     // 所有的锚点都需要注册在这里
     this.anchors = {};
+
     return this;
 };
 
@@ -137,26 +149,12 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
  * 渲染函数
  * */
 JModel.prototype.render = function (ctx) {
-    //ctx.begin();
     ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-    // 绘制调整大小的把手
-    var x = this.x_offset + this.width/2;
-    var y = this.y_offset + this.height/2;
-    ctx.beginPath();
-    for ( var i = 1;i <= 5; i ++) {
-        ctx.moveTo(x - 5 * i, y);
-        ctx.lineTo(x, y - 5 * i);
+    if ( this.image && this.image.complete ) {
+        ctx.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
-    ctx.stroke();
-
-    ctx.fillText("id:"+this.id, this.x_offset - 30, this.y_offset - 10);
-    ctx.fillText("x:"+this.x, this.x_offset - 30, this.y_offset - 22);
-    ctx.fillText("y:"+this.y, this.x_offset - 30, this.y_offset - 34);
-    ctx.fillText("id:"+this.id, this.x_offset - 30, this.y_offset - 46);
-    //ctx.end();
 };
-
 
 /**
  * 生成保存锚点对象
@@ -173,6 +171,24 @@ JModel.prototype.save = function () {
     }
 };
 
+/**
+ * 显示模型
+ * */
+JModel.prototype.hide = function () {
+    this.style.showed = false;
+};
+JModel.prototype.hidden = JModel.prototype.hide;
+
+JModel.prototype.show = function () {
+    this.style.showed = true;
+};
+
+JModel.prototype.toggle = function () {
+    this.style.showed = this.style.showed === false;
+};
+
+JModel.prototype.blink = function (hz) {
+};
 
 /**
  * 画板对象
@@ -191,6 +207,9 @@ var JPaintbord = function (dom_id, width, height, options) {
     this.height = height;
     this.options = options;
     this.editor = undefined;
+
+    // 请求重绘次数
+    this.commit_counter = 0;
 
     this.master = window.document.getElementById(this.dom_id).getContext('2d');
     this.dom = window.document.getElementById(this.dom_id);
@@ -213,39 +232,11 @@ var JPaintbord = function (dom_id, width, height, options) {
     // 模型， 最上层
     this.models_list = {};
 
-    // 预先从配置选项中加载对象
-    this.load(options.models, options.anchors, options.links);
-
     /*
     * 选择slave画板
     * */
     this.begin = function () {
         this.ctx = this.slave;
-    };
-
-    /**
-     * 将元素全都一次性绘制到slave画板上
-     * */
-    this.render = function () {
-        var ctx = this.ctx;
-        // 清空画布
-        ctx.clearRect(0, 0, this.width, this.height);
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-        for (i in this.links_list) {
-            //console.log(this.links_list[i]);
-            this.links_list[i].render && this.links_list[i].render(ctx);
-        }
-
-        for (i in this.anchors_list) {
-            //console.log(this.anchors_list[i]);
-            this.anchors_list[i].render && this.anchors_list[i].render(ctx);
-        }
-
-        for (i in this.models_list) {
-            //console.log(this.models_list[i]);
-            this.models_list[i].render && this.models_list[i].render(ctx);
-        }
     };
 
     /**
@@ -262,7 +253,84 @@ var JPaintbord = function (dom_id, width, height, options) {
     this.dom.onclick = function (ev) {this.painter.editor && this.painter.editor.onclick && this.painter.editor.onclick(ev);};
     this.dom.ondblclick = function (ev) {this.painter.editor && this.painter.editor.ondblclick && this.painter.editor.ondblclick(ev);};
 
-    return this;
+    // 添加动画支持
+    window.painter = this;
+    window.requestAnimationFrame(for_JPaintboard_animate);
+
+    // 预先从配置选项中加载对象
+    return this.load(options.models, options.anchors, options.links);
+};
+
+
+/**
+ * 提交一次重回请求
+ * */
+JPaintbord.prototype.commit = function () {
+    this.commit_counter += 1;
+};
+
+
+function for_JPaintboard_animate() {
+    var painter = window.painter;
+    if ( painter.commit_counter > 0 ) {
+        painter.begin();
+        painter.render();
+        painter.update();
+        painter.commit_counter = 0;
+    }
+    window.requestAnimationFrame(for_JPaintboard_animate)
+}
+
+
+/**
+ * 开始执行动画渲染，可能会增加能耗
+ * */
+JPaintbord.prototype.animate = function() {
+};
+
+/**
+ * 从指定的src加载图片
+ * 返回Image对象
+ * 图片加载成功后自动渲染
+ * */
+JPaintbord.prototype.load_image = function(src) {
+    var img = new Image();
+    img.painter = this;
+    img.onload = function() {
+        this.painter.commit();
+    };
+    img.src = src;
+    return img;
+};
+
+/**
+ * 将元素全都一次性绘制到slave画板上
+ * 注意渲染顺序为:
+ *   Link --->   anchor  ---> model
+ *  这个顺序在编辑器中有编辑关联性
+ * */
+JPaintbord.prototype.render = function () {
+    var ctx = this.ctx;
+    // 清空画布
+    ctx.clearRect(0, 0, this.width, this.height);
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+    for (i in this.links_list) {
+        //console.log(this.links_list[i]);
+        this.links_list[i].render && this.links_list[i].render(ctx);
+    }
+
+    for (i in this.anchors_list) {
+        //console.log(this.anchors_list[i]);
+        this.anchors_list[i].render && this.anchors_list[i].render(ctx);
+    }
+
+    for (i in this.models_list) {
+        //console.log(this.models_list[i]);
+        this.models_list[i].render && this.models_list[i].render(ctx);
+    }
+
+    this.editor && this.editor.render(ctx);
 };
 
 /**
@@ -286,14 +354,15 @@ JPaintbord.prototype.load_link = function(id, begin, end, style) {
 /**
  * 通过具体数据加载锚点
  * */
-JPaintbord.prototype.load_anchor = function(id, model, x_offset, y_offset, name, style) {
-    this.anchors_list[id] = new JAnchor(id, model, x_offset, y_offset, name, style);
+JPaintbord.prototype.load_anchor = function(id, model, x_offset, y_offset, style) {
+    this.anchors_list[id] = new JAnchor(id, model, x_offset, y_offset, style);
     this._id_pool = this._id_pool > id ? this._id_pool : id;
     return this.anchors_list[id];
 };
 
 /**
  * 从JSON对象加载全部模型、锚点、链接
+ * 作为一种例行任务，返回对象本身
  * */
 JPaintbord.prototype.load = function(models, anchors, links) {
     var i, len;
@@ -307,7 +376,7 @@ JPaintbord.prototype.load = function(models, anchors, links) {
     if ( anchors ) {
         for ( i = 0, len = anchors.length; i < len; i ++ ) {
             var a = anchors[i];
-            this.load_anchor(a.id, this.models_list[a.model], a.x_offset, a.y_offset, a.name, a.style);
+            this.load_anchor(a.id, this.models_list[a.model], a.x_offset, a.y_offset, a.style);
         }
     }
 
@@ -317,6 +386,8 @@ JPaintbord.prototype.load = function(models, anchors, links) {
             this.load_link(l.id, this.anchors_list[l.begin], this.anchors_list[l.end], l.style);
         }
     }
+
+    return this;
 };
 
 /**
