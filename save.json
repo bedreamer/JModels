@@ -309,7 +309,9 @@
       "style": {
         "backgroud_image": "/static/imgs/AAA.jpg",
         "name": "model_140",
-        "showed": true
+        "showed": true,
+        "blink": true,
+        "blink_hz": 5
       }
     }
   ],

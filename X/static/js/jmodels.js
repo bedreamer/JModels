@@ -142,6 +142,16 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
     // 所有的锚点都需要注册在这里
     this.anchors = {};
 
+    if ( style.blink && style.blink_hz ) {
+        function blink_me(model) {
+            var object = window.blink_object;
+            object.toggle();
+            object.bord.commit();
+        }
+        window.blink_object = this;
+        setInterval(blink_me, 1000/style.blink_hz);
+    }
+
     return this;
 };
 
@@ -151,7 +161,7 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
 JModel.prototype.render = function (ctx) {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-    if ( this.image && this.image.complete ) {
+    if ( this.image && this.image.complete && this.style.showed ) {
         ctx.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
 };
