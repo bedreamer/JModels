@@ -33,37 +33,37 @@
  * @param model: 所属模型
  * @param x_offset: 当前锚点在模型的中心点的x偏移值
  * @param y_offset: 当前锚点在模型的中心点的y偏移值
+ * @param name: 锚点名称, left, top, right, bottom, center
  * @param style: 当前锚点的风格定义结构
  * */
-var JAnchor = function (id, model, x_offset, y_offset, style) {
+var JAnchor = function (id, model, x_offset, y_offset, name, style) {
     this.id = id;
     this.model = model;
-    model.anchors[id] = this;
+    this.name = name;
+    model.anchors[name] = this;
 
     this.x_offset = x_offset;
     this.y_offset = y_offset;
     this.height = 10;
     this.width = 10;
-
-    this.x = model.x_offset + x_offset - this.width/2;
-    this.y = model.y_offset + y_offset - this.height/2;
-
     this.style = style;
-
-    this.get_height = function () {
-        return this.height;
-    };
-    this.get_width = function () {
-        return this.width;
-    };
-
-    this.render = function (ctx) {
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-        ctx.fillText(this.id, this.x, this.y);
-    };
 
     return this;
 };
+/**
+ * 渲染函数
+ * */
+JAnchor.prototype.render = function (ctx) {
+    if ( this.x === undefined || this.y === undefined ) {
+        this.x = this.model.x_offset + this.x_offset - this.width/2;
+        this.y = this.model.y_offset + this.y_offset - this.height/2;
+    }
+
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+    ctx.fillText(this.id, this.x, this.y);
+};
+
+
 /**
  * 生成保存锚点对象
  * */
@@ -71,18 +71,11 @@ JAnchor.prototype.save = function () {
     return {
         id: this.id,
         model: this.model.id,
+        name: this.name,
         x_offset: this.x_offset,
         y_offset: this.y_offset,
         style: this.style
     }
-};
-
-/**
- * 被动更新位置
- * */
-JAnchor.prototype.update_location = function () {
-    this.x = this.model.x_offset + this.x_offset - this.width/2;
-    this.y = this.model.y_offset + this.y_offset - this.height/2;
 };
 
 /**
@@ -97,15 +90,18 @@ var JLink = function (id, begin, end, style) {
     this.begin = begin;
     this.end = end;
     this.style = style;
-
-    this.render = function (ctx) {
-         ctx.beginPath();
-         ctx.moveTo(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
-         ctx.lineTo(this.end.x + this.end.width/2, this.end.y + this.end.height/2);
-         ctx.stroke();
-    };
     return this;
 };
+/**
+ * 渲染函数
+ * */
+JLink.prototype.render = function (ctx) {
+     ctx.beginPath();
+     ctx.moveTo(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
+     ctx.lineTo(this.end.x + this.end.width/2, this.end.y + this.end.height/2);
+     ctx.stroke();
+};
+
 /**
  * 生成保存锚点对象
  * */
@@ -134,33 +130,33 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
 
     // 所有的锚点都需要注册在这里
     this.anchors = {};
-
-    this.render = function (ctx) {
-        //ctx.begin();
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-        ctx.fillText("id:"+this.id, this.x_offset - 30, this.y_offset - 10);
-        ctx.fillText("x:"+this.x, this.x_offset - 30, this.y_offset - 22);
-        ctx.fillText("y:"+this.y, this.x_offset - 30, this.y_offset - 34);
-        ctx.fillText("id:"+this.id, this.x_offset - 30, this.y_offset - 46);
-        //ctx.end();
-    };
     return this;
 };
 
 /**
- * 更改模型的位置
+ * 渲染函数
  * */
-JModel.prototype.update_location = function(new_x_offset, new_y_offset) {
-    this.x_offset = new_x_offset;
-    this.y_offset = new_y_offset;
-    this.x = this.x_offset - this.width/2;
-    this.y = this.y_offset - this.height/2;
+JModel.prototype.render = function (ctx) {
+    //ctx.begin();
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-    for (id in this.anchors) {
-        this.anchors[id].update_location();
+    // 绘制调整大小的把手
+    var x = this.x_offset + this.width/2;
+    var y = this.y_offset + this.height/2;
+    ctx.beginPath();
+    for ( var i = 1;i <= 5; i ++) {
+        ctx.moveTo(x - 5 * i, y);
+        ctx.lineTo(x, y - 5 * i);
     }
+    ctx.stroke();
+
+    ctx.fillText("id:"+this.id, this.x_offset - 30, this.y_offset - 10);
+    ctx.fillText("x:"+this.x, this.x_offset - 30, this.y_offset - 22);
+    ctx.fillText("y:"+this.y, this.x_offset - 30, this.y_offset - 34);
+    ctx.fillText("id:"+this.id, this.x_offset - 30, this.y_offset - 46);
+    //ctx.end();
 };
+
 
 /**
  * 生成保存锚点对象
@@ -237,17 +233,17 @@ var JPaintbord = function (dom_id, width, height, options) {
         ctx.strokeRect(this.x, this.y, this.width, this.height);
 
         for (i in this.links_list) {
-            console.log(this.links_list[i]);
+            //console.log(this.links_list[i]);
             this.links_list[i].render && this.links_list[i].render(ctx);
         }
 
         for (i in this.anchors_list) {
-            console.log(this.anchors_list[i]);
+            //console.log(this.anchors_list[i]);
             this.anchors_list[i].render && this.anchors_list[i].render(ctx);
         }
 
         for (i in this.models_list) {
-            console.log(this.models_list[i]);
+            //console.log(this.models_list[i]);
             this.models_list[i].render && this.models_list[i].render(ctx);
         }
     };
@@ -290,8 +286,8 @@ JPaintbord.prototype.load_link = function(id, begin, end, style) {
 /**
  * 通过具体数据加载锚点
  * */
-JPaintbord.prototype.load_anchor = function(id, model, x_offset, y_offset, style) {
-    this.anchors_list[id] = new JAnchor(id, model, x_offset, y_offset, style);
+JPaintbord.prototype.load_anchor = function(id, model, x_offset, y_offset, name, style) {
+    this.anchors_list[id] = new JAnchor(id, model, x_offset, y_offset, name, style);
     this._id_pool = this._id_pool > id ? this._id_pool : id;
     return this.anchors_list[id];
 };
@@ -311,7 +307,7 @@ JPaintbord.prototype.load = function(models, anchors, links) {
     if ( anchors ) {
         for ( i = 0, len = anchors.length; i < len; i ++ ) {
             var a = anchors[i];
-            this.load_anchor(a.id, this.models_list[a.model], a.x_offset, a.y_offset, a.style);
+            this.load_anchor(a.id, this.models_list[a.model], a.x_offset, a.y_offset, a.name, a.style);
         }
     }
 
