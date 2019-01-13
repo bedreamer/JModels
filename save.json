@@ -1,0 +1,137 @@
+{
+  "models": [
+    {
+      "id": 2,
+      "bord": 1,
+      "x_offset": 161,
+      "y_offset": 182,
+      "width": 123,
+      "height": 123,
+      "style": {}
+    },
+    {
+      "id": 8,
+      "bord": 1,
+      "x_offset": 510,
+      "y_offset": 181,
+      "width": 234,
+      "height": 234,
+      "style": {}
+    },
+    {
+      "id": 16,
+      "bord": 1,
+      "x_offset": 854,
+      "y_offset": 180,
+      "width": 135,
+      "height": 235,
+      "style": {}
+    }
+  ],
+  "links": [
+    {
+      "id": 15,
+      "begin": 5,
+      "end": 17,
+      "style": {}
+    },
+    {
+      "id": 22,
+      "begin": 6,
+      "end": 9,
+      "style": {}
+    }
+  ],
+  "anchors": [
+    {
+      "id": 3,
+      "model": 2,
+      "x_offset": -61.5,
+      "y_offset": 0
+    },
+    {
+      "id": 4,
+      "model": 2,
+      "x_offset": 0,
+      "y_offset": -61.5
+    },
+    {
+      "id": 5,
+      "model": 2,
+      "x_offset": 61.5,
+      "y_offset": 0
+    },
+    {
+      "id": 6,
+      "model": 2,
+      "x_offset": 0,
+      "y_offset": 61.5
+    },
+    {
+      "id": 7,
+      "model": 2,
+      "x_offset": 0,
+      "y_offset": 0
+    },
+    {
+      "id": 9,
+      "model": 8,
+      "x_offset": -117,
+      "y_offset": 0
+    },
+    {
+      "id": 10,
+      "model": 8,
+      "x_offset": 0,
+      "y_offset": -117
+    },
+    {
+      "id": 11,
+      "model": 8,
+      "x_offset": 117,
+      "y_offset": 0
+    },
+    {
+      "id": 12,
+      "model": 8,
+      "x_offset": 0,
+      "y_offset": 117
+    },
+    {
+      "id": 13,
+      "model": 8,
+      "x_offset": 0,
+      "y_offset": 0
+    },
+    {
+      "id": 17,
+      "model": 16,
+      "x_offset": -67.5,
+      "y_offset": 0
+    },
+    {
+      "id": 18,
+      "model": 16,
+      "x_offset": 0,
+      "y_offset": -117.5
+    },
+    {
+      "id": 19,
+      "model": 16,
+      "x_offset": 67.5,
+      "y_offset": 0
+    },
+    {
+      "id": 20,
+      "model": 16,
+      "x_offset": 0,
+      "y_offset": 117.5
+    },
+    {
+      "id": 21,
+      "model": 16,
+      "x_offset": 0,
+      "y_offset": 0
+    }
+  ]
+}
