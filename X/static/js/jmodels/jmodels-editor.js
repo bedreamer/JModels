@@ -111,7 +111,7 @@ JEditor.prototype.update = function () {
 JEditor.prototype.create_link = function (begin, end, style) {
     var id = ++ this.painter._id_pool;
     if ( typeof begin != 'object' ) {
-        target = this.painter.search_anrchor(begin);
+        target = this.painter.search_anchor(begin);
         if ( ! target ) {
             console.error("没有找到锚点", begin);
             return undefined;
@@ -119,7 +119,7 @@ JEditor.prototype.create_link = function (begin, end, style) {
         begin = target;
     }
     if ( typeof end != 'object' ) {
-        target = this.painter.search_anrchor(end);
+        target = this.painter.search_anchor(end);
         if ( ! target ) {
             console.error("没有找到锚点", end);
             return undefined;
