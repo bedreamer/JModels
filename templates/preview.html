@@ -29,28 +29,20 @@
 
   <!--- Example Javascript -->
   <script>
-  $(document)
-    .ready(function() {
-      $('.ui.menu .ui.dropdown').dropdown({
-        on: 'hover'
+  $(document).ready(function() {
+      $('.ui.menu .ui.dropdown').dropdown({on: 'hover'});
+      $('.ui.menu a.item').on('click', function() {
+          $(this).addClass('active').siblings().removeClass('active');
       });
-      $('.ui.menu a.item')
-        .on('click', function() {
-          $(this)
-            .addClass('active')
-            .siblings()
-            .removeClass('active')
-          ;
-        })
-      ;
-    });
 
-    $.getJSON("/json/", '', function (data, status, xhr) {
-          var painter = new JPaintbord('paint', 1000, 600, data);
-          painter.begin();
-          painter.render();
-          painter.update();
-    });
+        $.getJSON("/json/", '', function (data, status, xhr) {
+              var painter = new JPaintbord('paint', 1000, 600, data);
+              painter.begin();
+              painter.render();
+              painter.update();
+        });
+  });
+
 
   </script>
 </head>

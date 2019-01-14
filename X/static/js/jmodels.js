@@ -55,6 +55,7 @@ var JAnchor = function (id, model, x_offset, y_offset, style) {
     this.x = model.x_offset + this.x_offset - this.width/2;
     this.y = model.y_offset + this.y_offset - this.height/2;
 
+
     return this;
 };
 /**
@@ -90,16 +91,57 @@ var JLink = function (id, begin, end, style) {
     this.begin = begin;
     this.end = end;
     this.style = style;
+
+    this.idx_x = 0;
     return this;
 };
 /**
  * 渲染函数
  * */
 JLink.prototype.render = function (ctx) {
+    /*
      ctx.beginPath();
      ctx.moveTo(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
      ctx.lineTo(this.end.x + this.end.width/2, this.end.y + this.end.height/2);
      ctx.stroke();
+     */
+    ctx.save();
+    var delta_x = (this.end.x + this.end.width/2) - (this.begin.x + this.begin.width/2);
+    var delta_y = (this.end.y + this.end.height/2) - (this.begin.y + this.begin.height/2);
+
+    ctx.translate(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
+    var ar = Math.atan2(delta_y, delta_x);
+
+    ctx.rotate(ar);
+    var len = Math.sqrt(delta_x * delta_x + delta_y * delta_y);
+    console.log("delta x:", delta_x, "delta y:", delta_y, "degree:", ar, "len:", len);
+
+    ctx.font = "12px serif";
+    var text = "Hello world";
+    var x = len / 2;
+    ctx.fillText(text, x, 20);
+
+    ctx.fillStyle = 'red';
+    ctx.strokeStyle = 'red';
+    var record_x = new Array();
+    for (x = this.idx_x; x * 5 < len + 5; x += 3 ) {
+        ctx.moveTo(x * 5, 5);
+        ctx.lineTo(x * 5 + 5, 0);
+        ctx.lineTo(x * 5, -5);
+        ctx.stroke();
+
+        record_x.push(x);
+    }
+    console.log(record_x);
+     ctx.moveTo(0, 0);
+     ctx.lineTo(len, 0);
+    ctx.stroke();
+    this.idx_x += 1;
+    if ( this.idx_x > 4 ) {
+        this.idx_x = 0;
+    }
+    //ctx.fillRect(0, -2, len + 5, 5);
+    ctx.restore();
 };
 
 /**
@@ -131,6 +173,20 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
     if ( style.name === undefined ) style.name = 'model_' + id;
     if ( style.showed === undefined ) style.showed = true;
 
+    if ( style.border === undefined ) style.border = {};
+
+    if ( style.border.color === undefined ) style.border.color = {};
+    if ( style.border.color.left === undefined ) style.border.color.left = '#000000';
+    if ( style.border.color.top === undefined ) style.border.color.top = '#000000';
+    if ( style.border.color.right === undefined ) style.border.color.right = '#000000';
+    if ( style.border.color.bottom === undefined ) style.border.color.bottom = '#000000';
+
+    if ( style.border.width === undefined ) style.border.width = {};
+    if ( style.border.width.left === undefined ) style.border.width.left = 1;
+    if ( style.border.width.top === undefined ) style.border.width.top = 1;
+    if ( style.border.width.right === undefined ) style.border.width.right = 1;
+    if ( style.border.width.bottom === undefined ) style.border.width.bottom = 1;
+
     this.style = style;
 
     if ( style.backgroud_image !== undefined ) {
@@ -141,17 +197,6 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
 
     // 所有的锚点都需要注册在这里
     this.anchors = {};
-
-    if ( style.blink && style.blink_hz ) {
-        function blink_me(model) {
-            var object = window.blink_object;
-            object.toggle();
-            object.bord.commit();
-        }
-        window.blink_object = this;
-        setInterval(blink_me, 1000/style.blink_hz);
-    }
-
     return this;
 };
 
@@ -160,10 +205,7 @@ var JModel = function (id, bord, x_offset, y_offset, width, height, style) {
  * */
 JModel.prototype.render = function (ctx) {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-    if ( this.image && this.image.complete && this.style.showed ) {
-        ctx.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
-    }
+    ctx.drawImage(this.image, 100, 0, this.width, this.height, this.x, this.y, 80, 80);
 };
 
 /**
@@ -264,8 +306,8 @@ var JPaintbord = function (dom_id, width, height, options) {
     this.dom.ondblclick = function (ev) {this.painter.editor && this.painter.editor.ondblclick && this.painter.editor.ondblclick(ev);};
 
     // 添加动画支持
-    window.painter = this;
-    window.requestAnimationFrame(for_JPaintboard_animate);
+    // window.painter = this;
+    // window.requestAnimationFrame(for_JPaintboard_animate);
 
     // 预先从配置选项中加载对象
     return this.load(options.models, options.anchors, options.links);
