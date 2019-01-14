@@ -36,4 +36,14 @@ def show_change_model_page(request, id):
         all_models = json.loads(file.read())
         model = [model for model in all_models['models'] if model['id'] == id][0]
 
+    if request.method == 'POST':
+        print(request.POST)
+        model['style']['row'] = int(request.POST['row'])
+        model['style']['column'] = int(request.POST['column'])
+
+        with codecs.open(filename, mode="w", encoding='utf8') as file:
+            file.write(json.dumps(all_models, ensure_ascii=False, indent=2))
+
+        return HttpResponseRedirect('/')
+
     return render(request, "model_change_form.html", context={"model": model, "all_model": all_models})

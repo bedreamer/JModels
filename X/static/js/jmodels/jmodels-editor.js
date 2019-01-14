@@ -155,7 +155,7 @@ JEditor.prototype.create_anchor = function (model, x_offset, y_offset, style) {
  * */
 JEditor.prototype.create_model = function(x_offset, y_offset, width, height, style) {
     var id = ++ this.painter._id_pool;
-    var model = new JModel(id, this.painter, x_offset, y_offset, width, height, {backgroud_image: "/static/imgs/AAA.jpg"});
+    var model = new JModel(id, this.painter, x_offset, y_offset, width, height);
     this.painter.models_list[id] = model;
 
     var left_anchors = this.create_anchor(model, -width/2, 0, {name: 'left'});
@@ -203,7 +203,7 @@ JEditor.prototype.save = function () {
  * 从json对象加载到画板
  * */
 JEditor.prototype.load = function (obj) {
-    this.painter.load(obj.models, obj.anchors, obj.links);
+    this.painter.load(obj.models, obj.anchors, obj.links, obj.librarys);
 };
 
 /**
