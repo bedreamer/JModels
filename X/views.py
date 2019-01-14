@@ -40,6 +40,7 @@ def show_change_model_page(request, id):
         print(request.POST)
         model['style']['row'] = int(request.POST['row'])
         model['style']['column'] = int(request.POST['column'])
+        model['style']['library'] = int(request.POST['library'])
 
         with codecs.open(filename, mode="w", encoding='utf8') as file:
             file.write(json.dumps(all_models, ensure_ascii=False, indent=2))

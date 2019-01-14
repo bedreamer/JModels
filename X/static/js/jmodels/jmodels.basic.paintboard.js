@@ -33,14 +33,14 @@ var JPaintbord = function (dom_id, width, height, options) {
     this.slave.canvas.width = this.master.canvas.width = this.width;
     this.slave.canvas.height = this.master.canvas.height = this.height;
 
+    // 图片库文件
+    this.image_libraries_list = {};
     // 链接, 最下层
     this.links_list = {};
     // 锚点, 中间层
     this.anchors_list = {};
     // 模型， 最上层
     this.models_list = {};
-    // 图片库文件
-    this.images_list = {};
 
     /*
     * 选择slave画板
@@ -68,7 +68,7 @@ var JPaintbord = function (dom_id, width, height, options) {
     window.requestAnimationFrame(for_JPaintboard_animate);
 
     // 预先从配置选项中加载对象
-    return this.load(options.models, options.anchors, options.links, options.librarys);
+    return this.load(options.models, options.anchors, options.links, options.libraries);
 };
 
 
@@ -115,17 +115,17 @@ JPaintbord.prototype.render = function () {
     ctx.clearRect(0, 0, this.width, this.height);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-    for (i in this.links_list) {
+    for (let i in this.links_list) {
         //console.log(this.links_list[i]);
         this.links_list[i].render && this.links_list[i].render(ctx);
     }
 
-    for (i in this.anchors_list) {
+    for (let i in this.anchors_list) {
         //console.log(this.anchors_list[i]);
         this.anchors_list[i].render && this.anchors_list[i].render(ctx);
     }
 
-    for (i in this.models_list) {
+    for (let i in this.models_list) {
         //console.log(this.models_list[i]);
         this.models_list[i].render && this.models_list[i].render(ctx);
     }
@@ -163,55 +163,41 @@ JPaintbord.prototype.load_anchor = function(id, model, x_offset, y_offset, style
 /**
  * 通过具体数据加载图片库
  * */
-JPaintbord.prototype.load_image = function(id, name, src, row, column, unit_width, unit_height) {
-    var img = new Image();
-    img.painter = this;
-    img.row = row;
-    img.column = column;
-    img.unit_width = unit_width;
-    img.unit_height = unit_height;
-    img.id = id;
-    img._name = name;
-    img.onload = function() {
-        this.painter.commit();
-    };
-    img.src = src;
-    this.images_list[id] = img;
+JPaintbord.prototype.load_image_library = function(id, name, src, row, column, unit_width, unit_height) {
+    this.image_libraries_list[id] = new JLibrary(id, name, src, row, column, unit_width, unit_height);
     this._id_pool = this._id_pool > id ? this._id_pool : id;
-    return img;
+    return this.image_libraries_list[id];
 };
 
 /**
  * 从JSON对象加载全部模型、锚点、链接
  * 作为一种例行任务，返回对象本身
  * */
-JPaintbord.prototype.load = function(models, anchors, links, librarys) {
-    var i, len;
-
-    if ( librarys ) {
-        for ( i = 0, len = librarys.length; i < len; i ++ ) {
-            var l = librarys[i];
-            this.load_image(l.id, l.name, l.src, l.row, l.column, l.unit_width, l.unit_height);
+JPaintbord.prototype.load = function(models, anchors, links, libraries) {
+    if ( libraries ) {
+        for ( let i = 0, len = libraries.length; i < len; i ++ ) {
+            let l = libraries[i];
+            this.load_image_library(l.id, l.name, l.src, l.row, l.column, l.unit_width, l.unit_height);
         }
     }
 
     if ( models ) {
-        for ( i = 0, len = models.length; i < len; i ++ ) {
-            var m = models[i];
+        for ( let i = 0, len = models.length; i < len; i ++ ) {
+            let m = models[i];
             this.load_model(m.id, m.x_offset, m.y_offset, m.width, m.height, m.style);
         }
     }
 
     if ( anchors ) {
-        for ( i = 0, len = anchors.length; i < len; i ++ ) {
-            var a = anchors[i];
+        for ( let i = 0, len = anchors.length; i < len; i ++ ) {
+            let a = anchors[i];
             this.load_anchor(a.id, this.models_list[a.model], a.x_offset, a.y_offset, a.style);
         }
     }
 
     if ( links ) {
-        for ( i = 0, len = links.length; i < len; i ++ ) {
-            var l = links[i];
+        for ( let i = 0, len = links.length; i < len; i ++ ) {
+            let l = links[i];
             this.load_link(l.id, this.anchors_list[l.begin], this.anchors_list[l.end], l.style);
         }
     }
@@ -249,8 +235,8 @@ JPaintbord.prototype.search_anchor_by_name = function(name) {};
 /**
  * 根据ID搜索图片库
  * */
-JPaintbord.prototype.search_image = function (id) {
-    return this.images_list[id];
+JPaintbord.prototype.search_image_library = function (id) {
+    return this.image_libraries_list[id];
 };
-JPaintbord.prototype.search_image_by_id = JPaintbord.prototype.search_image;
-JPaintbord.prototype.search_image_by_name = function(name) {};
+JPaintbord.prototype.search_image_library_by_id = JPaintbord.prototype.search_image_library;
+JPaintbord.prototype.search_image_library_by_name = function(name) {};

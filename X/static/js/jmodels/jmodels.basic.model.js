@@ -17,9 +17,9 @@ var JModel = function (id, painter, x_offset, y_offset, width, height, style) {
     this.style = style;
 
     if ( style.library ) {
-        this.image = this.painter.search_image(style.library);
+        this.library = this.painter.search_image_library(style.library);
     } else {
-        this.image = undefined;
+        this.library = undefined;
     }
 
     // 所有的锚点都需要注册在这里
@@ -32,10 +32,12 @@ var JModel = function (id, painter, x_offset, y_offset, width, height, style) {
  * */
 JModel.prototype.render = function (ctx) {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-    if ( this.image && this.image.complete ) {
-        var sy = this.style.row * this.image.unit_height;
-        var sx = this.style.column * this.image.unit_width;
-        ctx.drawImage(this.image, sx, sy, this.image.unit_width, this.image.unit_height, this.x, this.y, this.width, this.height);
+
+    if ( this.library && this.library.image.complete ) {
+        let sy = this.style.row * this.library.unit_height;
+        let sx = this.style.column * this.library.unit_width;
+
+        ctx.drawImage(this.library.image, sx, sy, this.library.unit_width, this.library.unit_height, this.x, this.y, this.width, this.height);
     }
 };
 

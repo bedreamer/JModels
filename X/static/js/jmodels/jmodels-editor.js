@@ -136,7 +136,7 @@ JEditor.prototype.create_link = function (begin, end, style) {
  * 在当前的模型列表终新建一个模型
  * */
 JEditor.prototype.create_anchor = function (model, x_offset, y_offset, style) {
-    var id = ++ this.painter._id_pool;
+    let id = ++ this.painter._id_pool;
     if ( typeof model != 'object' ) {
         target = this.painter.search_model(model);
         if ( ! target ) {
@@ -171,39 +171,44 @@ JEditor.prototype.create_model = function(x_offset, y_offset, width, height, sty
  * 将画板中的对象保存起来
  * */
 JEditor.prototype.save = function () {
-    var models = [];
-    var links = [];
-    var anchors = [];
+    let models = [];
+    let links = [];
+    let anchors = [];
+    let libraries = [];
 
-    for (i in this.painter.links_list) {
+    for (let i in this.painter.image_libraries_list) {
+        libraries.push(this.painter.image_libraries_list[i].save())
+    }
+
+    for (let i in this.painter.links_list) {
         links.push(this.painter.links_list[i].save())
     }
 
-    for (i in this.painter.anchors_list) {
+    for (let i in this.painter.anchors_list) {
         anchors.push(this.painter.anchors_list[i].save())
     }
 
-    for (i in this.painter.models_list) {
+    for (let i in this.painter.models_list) {
         models.push(this.painter.models_list[i].save())
     }
 
-    var options = {
+    return {
         models: models,
         links: links,
-        anchors: anchors
+        anchors: anchors,
+        libraries: libraries
     };
-
-    var str = JSON.stringify(options);
-    //console.log(str);
-
-    return options;
 };
 
 /**
  * 从json对象加载到画板
  * */
 JEditor.prototype.load = function (obj) {
-    this.painter.load(obj.models, obj.anchors, obj.links, obj.librarys);
+    this.painter.load(obj.models, obj.anchors, obj.links, obj.libraries);
+    if ( ! obj.libraries || ! obj.libraries.length ) {
+        this.painter.load_image_library(++ this.painter._id_pool, "library1", "/static/imgs/800x630.png", 9, 10, 80, 70);
+        this.painter.load_image_library(++ this.painter._id_pool, "library2", "/static/imgs/warn_260x260.jpg", 3, 3, 87, 87);
+    }
 };
 
 /**
@@ -247,7 +252,7 @@ JEditor.prototype.update_model_location = function(model, new_x_offset, new_y_of
     model.x = model.x_offset - model.width/2;
     model.y = model.y_offset - model.height/2;
 
-    for (name in model.anchors) {
+    for (let name in model.anchors) {
         anchor = model.anchors[name];
         anchor.x = anchor.model.x_offset + anchor.x_offset - anchor.width/2;
         anchor.y = anchor.model.y_offset + anchor.y_offset - anchor.height/2;

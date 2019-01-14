@@ -107,16 +107,25 @@
             <hr>
             <div class="six fields">
                 <div class="field">
-                    <label>库</label>
-                    <input type="text" name="library" placeholder="库" value="{{ model.style.library }}">
-                </div>
-                <div class="field">
                     <label>行</label>
                     <input type="number" name="row" placeholder="行" value="{{ model.style.row }}">
                 </div>
                 <div class="field">
                     <label>列</label>
                     <input type="number" name="column" placeholder="列" value="{{ model.style.column }}">
+                </div>
+                <div class="field">
+                    <label>库</label>
+                    <div class="ui selection dropdown">
+                        <input type="hidden" name="library">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">{{ model.style.library }}</div>
+                        <div class="menu">
+                            {% for library in all_model.libraries %}
+                            <div class="item" data-value="{{ library.id }}">{{ library.name }}/{{ library.src }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

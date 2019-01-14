@@ -1,29 +1,33 @@
 {
-  "librarys": [
-    {
-      "id": 100,
-      "name": "000",
-      "row": 9,
-      "column": 10,
-      "src": "/static/imgs/800x630.png",
-      "unit_width": 80,
-      "unit_height": 70
-    }
-  ],
   "models": [
     {
       "id": 2,
       "painter": 1,
-      "x_offset": 315,
-      "y_offset": 171,
+      "x_offset": 230,
+      "y_offset": 127,
       "width": 80,
       "height": 80,
       "style": {
         "name": "model_2",
         "showed": true,
-        "library": 100,
-        "row": 4,
-        "column": 7
+        "row": 0,
+        "column": 2,
+        "library": 8
+      }
+    },
+    {
+      "id": 10,
+      "painter": 1,
+      "x_offset": 443,
+      "y_offset": 159,
+      "width": 80,
+      "height": 80,
+      "style": {
+        "name": "model_10",
+        "showed": true,
+        "row": 2,
+        "column": 4,
+        "library": 8
       }
     }
   ],
@@ -73,6 +77,71 @@
       "style": {
         "name": "center"
       }
+    },
+    {
+      "id": 11,
+      "model": 10,
+      "x_offset": -40,
+      "y_offset": 0,
+      "style": {
+        "name": "left"
+      }
+    },
+    {
+      "id": 12,
+      "model": 10,
+      "x_offset": 0,
+      "y_offset": -40,
+      "style": {
+        "name": "top"
+      }
+    },
+    {
+      "id": 13,
+      "model": 10,
+      "x_offset": 40,
+      "y_offset": 0,
+      "style": {
+        "name": "right"
+      }
+    },
+    {
+      "id": 14,
+      "model": 10,
+      "x_offset": 0,
+      "y_offset": 40,
+      "style": {
+        "name": "bottom"
+      }
+    },
+    {
+      "id": 15,
+      "model": 10,
+      "x_offset": 0,
+      "y_offset": 0,
+      "style": {
+        "name": "center"
+      }
+    }
+  ],
+  "libraries": [
+    {
+      "row": 9,
+      "column": 10,
+      "unit_height": 70,
+      "unit_width": 80,
+      "id": 8,
+      "name": "library1",
+      "src": "/static/imgs/800x630.png"
+    },
+    {
+      "row": 3,
+      "column": 3,
+      "unit_height": 87,
+      "unit_width": 87,
+      "id": 9,
+      "name": "library2",
+      "src": "/static/imgs/warn_260x260.jpg"
     }
   ]
 }
