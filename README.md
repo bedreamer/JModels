@@ -5,6 +5,8 @@
 # 拓扑显示
 ![拓扑显示](https://raw.githubusercontent.com/bedreamer/JModels/master/X/static/imgs/example/tree.png "logo")
 
+## library
+    directory in X/static/js/jmodels
 
 ## JEditor
     编辑器对象
