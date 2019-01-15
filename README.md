@@ -1,4 +1,4 @@
-![JModels](https://raw.githubusercontent.com/bedreamer/JModels/master/X/static/imgs/logo/200x200.png "logo")
+![JModels](https://raw.githubusercontent.com/bedreamer/JModels/master/X/static/imgs/logo/100x100.png "logo")
 # JModels
     利用canvas标签及功能实现多节点、多连接、网络图、系统拓扑图的状态和结构展示。
 
