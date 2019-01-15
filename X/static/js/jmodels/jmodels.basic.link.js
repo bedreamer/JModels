@@ -52,8 +52,8 @@ JLink.prototype.render = function (ctx) {
     //console.log("delta x:", delta_x, "delta y:", delta_y, "degree:", ar, "len:", len);
 
     ctx.font = "12px serif";
-    var text = "Hello world";
-    var x = len / 2;
+    let text = "Hello world";
+    let x = len / 2;
     if ( ar >= 0 ) {
         ctx.fillText(text, x, -5);
     } else {
@@ -62,7 +62,7 @@ JLink.prototype.render = function (ctx) {
 
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
-    for (var i = 0, x = this.idx_x; x * 5 + 10 < len + 5; x += 3, i++ ) {
+    for (let i = 0, x = this.idx_x; x * 5 + 10 < len + 5; x += 3, i++ ) {
         if ( i % 2 ) {
             ctx.fillStyle = 'red';
             ctx.strokeStyle = 'red';

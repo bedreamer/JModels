@@ -68,7 +68,7 @@ var JPaintbord = function (dom_id, width, height, options) {
     window.requestAnimationFrame(for_JPaintboard_animate);
 
     // 预先从配置选项中加载对象
-    return this.load(options.models, options.anchors, options.links, options.libraries);
+    return this.load(options.width, options.height, options.models, options.anchors, options.links, options.libraries);
 };
 
 
@@ -172,8 +172,9 @@ JPaintbord.prototype.load_image_library = function(id, name, src, row, column, u
 /**
  * 从JSON对象加载全部模型、锚点、链接
  * 作为一种例行任务，返回对象本身
+ * width，height 可以让对象的位置进行等比例适配
  * */
-JPaintbord.prototype.load = function(models, anchors, links, libraries) {
+JPaintbord.prototype.load = function(width, height, models, anchors, links, libraries) {
     if ( libraries ) {
         for ( let i = 0, len = libraries.length; i < len; i ++ ) {
             let l = libraries[i];
@@ -182,23 +183,28 @@ JPaintbord.prototype.load = function(models, anchors, links, libraries) {
     }
 
     if ( models ) {
+        let x_zoom_index = this.width / width;
+        let y_zoom_index = this.height / height;
         for ( let i = 0, len = models.length; i < len; i ++ ) {
             let m = models[i];
-            this.load_model(m.id, m.x_offset, m.y_offset, m.width, m.height, m.style);
+            this.load_model(m.id, m.x_offset * x_zoom_index, m.y_offset * y_zoom_index, m.width, m.height, m.style);
         }
     }
 
     if ( anchors ) {
         for ( let i = 0, len = anchors.length; i < len; i ++ ) {
             let a = anchors[i];
-            this.load_anchor(a.id, this.models_list[a.model], a.x_offset, a.y_offset, a.style);
+            let model = this.search_model(a.model);
+            this.load_anchor(a.id, model, a.x_offset, a.y_offset, a.style);
         }
     }
 
     if ( links ) {
         for ( let i = 0, len = links.length; i < len; i ++ ) {
             let l = links[i];
-            this.load_link(l.id, this.anchors_list[l.begin], this.anchors_list[l.end], l.style);
+            let begin_anchor = this.search_anchor(l.begin);
+            let end_anchor = this.search_anchor(l.end);
+            this.load_link(l.id, begin_anchor, end_anchor, l.style);
         }
     }
 

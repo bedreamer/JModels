@@ -37,10 +37,12 @@
       });
 
         $.getJSON("/json/", '', function (data, status, xhr) {
-              var painter = new JPaintbord('paint', 1000, 600, data);
-              painter.begin();
-              painter.render();
-              painter.update();
+            let width = Number($("#id_canvas_body").css("width").slice(0, -2));
+
+            var painter = new JPaintbord('paint', width, 800, data);
+            painter.begin();
+            painter.render();
+            painter.update();
         });
   });
 
@@ -61,7 +63,9 @@
   </div>
 </div>
 
+<div id="id_canvas_body" class="ui fluid">
     <canvas id="paint"></canvas>
+</div>
 
 </body>
 </html>

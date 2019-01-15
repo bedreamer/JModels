@@ -1,7 +1,7 @@
 /**
  * 模型对象
  * */
-var JModel = function (id, painter, x_offset, y_offset, width, height, style) {
+let JModel = function (id, painter, x_offset, y_offset, width, height, style) {
     this.id = id;
     this.painter = painter;
     this.x_offset = x_offset;
