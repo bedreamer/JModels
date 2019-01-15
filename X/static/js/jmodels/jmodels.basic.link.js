@@ -51,6 +51,15 @@ JLink.prototype.render = function (ctx) {
     var len = Math.sqrt(delta_x * delta_x + delta_y * delta_y);
     //console.log("delta x:", delta_x, "delta y:", delta_y, "degree:", ar, "len:", len);
 
+    // 创建固定绘制区域, 使有效绘制区域限制在固定范围内
+    ctx.beginPath();
+    ctx.lineTo(0, 5);
+    ctx.lineTo(len, 5);
+    ctx.lineTo(len, -5);
+    ctx.lineTo(0, -5);
+    ctx.closePath();
+    ctx.clip();
+
     ctx.font = "12px serif";
     let text = "Hello world";
     let x = len / 2;

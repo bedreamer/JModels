@@ -114,6 +114,7 @@ JPaintbord.prototype.render = function () {
     var ctx = this.ctx;
     // 清空画布
     //ctx.clearRect(0, 0, this.width, this.height);
+    ctx.fillStyle = '#EEEEEE';
     ctx.fillRect(0, 0, this.width, this.height);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
 
