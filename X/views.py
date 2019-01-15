@@ -38,9 +38,38 @@ def show_change_model_page(request, id):
 
     if request.method == 'POST':
         print(request.POST)
-        model['style']['row'] = int(request.POST['row'])
-        model['style']['column'] = int(request.POST['column'])
-        model['style']['library'] = int(request.POST['library'])
+        try:
+            model['style']['row'] = int(request.POST['row'])
+        except:
+            model['style']['row'] = 0
+
+        try:
+            model['style']['column'] = int(request.POST['column'])
+        except:
+            model['style']['column'] = 0
+
+        try:
+            model['style']['library'] = int(request.POST['library'])
+        except:
+            model['style']['library'] = all_models['libraries'][0]['id']
+
+        try:
+            model['style']['v_scale'] = int(request.POST['v_scale'])
+        except KeyError:
+            model['style']['v_scale'] = 1
+
+        try:
+            model['style']['h_scale'] = int(request.POST['h_scale'])
+        except KeyError:
+            model['style']['h_scale'] = 1
+
+        try:
+            model['style']['degree'] = float(request.POST['degree'])
+        except:
+            model['style']['degree'] = 0
+
+        # 外框控制
+        model['style']['show_boarder'] = True if int(request.POST['show_boarder']) > 0 else False
 
         with codecs.open(filename, mode="w", encoding='utf8') as file:
             file.write(json.dumps(all_models, ensure_ascii=False, indent=2))

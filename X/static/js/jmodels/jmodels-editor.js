@@ -163,7 +163,8 @@ JEditor.prototype.create_anchor = function (model, x_offset, y_offset, style) {
  * */
 JEditor.prototype.create_model = function(x_offset, y_offset, width, height, style) {
     let id = ++ this.painter._id_pool;
-    let model = new JModel(id, this.painter, x_offset, y_offset, width, height, style);
+    let name = "model_" + id;
+    let model = new JModel(id, this.painter, name, x_offset, y_offset, width, height, style);
     this.painter.models_list[id] = model;
 
     let left_anchors = this.create_anchor(model, -width/2, 0, {name: 'left'});
@@ -227,11 +228,6 @@ JEditor.prototype.save = function () {
  * */
 JEditor.prototype.load = function (obj) {
     this.painter.load(obj.width, obj.height, obj.models, obj.anchors, obj.links, obj.libraries);
-
-    if ( ! obj.libraries || ! obj.libraries.length ) {
-        this.painter.load_image_library(++ this.painter._id_pool, "library1", "/static/imgs/800x630.png", 9, 10, 80, 70);
-        this.painter.load_image_library(++ this.painter._id_pool, "library2", "/static/imgs/warn_260x260.jpg", 3, 3, 87, 87);
-    }
 };
 
 /**

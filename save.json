@@ -1,153 +1,131 @@
 {
   "models": [
     {
-      "id": 2,
+      "id": 4,
+      "name": "model_4",
       "painter": 1,
-      "x_offset": 771,
-      "y_offset": 219,
-      "width": 113,
-      "height": 87,
+      "x_offset": 317,
+      "y_offset": 233,
+      "width": 90,
+      "height": 82,
       "style": {
-        "name": "model_2",
         "showed": true,
-        "row": 2,
-        "column": 5,
-        "library": 14
+        "row": 0,
+        "column": 2,
+        "library": 2,
+        "degree": 0,
+        "v_scale": 1,
+        "h_scale": -1,
+        "hide_boarder": false,
+        "show_boarder": true
       }
     },
     {
-      "id": 8,
+      "id": 10,
+      "name": "model_10",
       "painter": 1,
-      "x_offset": 257,
-      "y_offset": 231,
-      "width": 68,
-      "height": 108,
+      "x_offset": 453,
+      "y_offset": 111,
+      "width": 32,
+      "height": 34,
       "style": {
-        "name": "model_8",
         "showed": true,
-        "row": 0,
-        "column": 5,
-        "library": 14
+        "row": 1,
+        "column": 1,
+        "library": 3,
+        "v_scale": 1,
+        "h_scale": 1,
+        "degree": 0,
+        "show_boarder": false
       }
     },
     {
       "id": 16,
+      "name": "model_16",
       "painter": 1,
-      "x_offset": 521,
-      "y_offset": 478,
+      "x_offset": 723,
+      "y_offset": 188,
       "width": 80,
       "height": 80,
       "style": {
-        "name": "model_16",
         "showed": true,
         "row": 2,
-        "column": 6,
-        "library": 14
+        "column": 4,
+        "library": 2,
+        "v_scale": 1,
+        "h_scale": 1,
+        "degree": 0,
+        "show_boarder": true
       }
     },
     {
       "id": 22,
+      "name": "model_22",
       "painter": 1,
-      "x_offset": 521,
-      "y_offset": 62,
+      "x_offset": 336,
+      "y_offset": 412,
       "width": 80,
       "height": 80,
       "style": {
-        "name": "model_22",
         "showed": true,
-        "row": 2,
-        "column": 4,
-        "library": 14
-      }
-    },
-    {
-      "id": 28,
-      "painter": 1,
-      "x_offset": 518,
-      "y_offset": 254,
-      "width": 83,
-      "height": 81,
-      "style": {
-        "name": "model_28",
-        "showed": true,
-        "row": 2,
-        "column": 9,
-        "library": 14
+        "row": 0,
+        "column": 0,
+        "library": 2,
+        "v_scale": 1,
+        "h_scale": 1,
+        "degree": 0,
+        "show_boarder": false
       }
     }
   ],
   "links": [
     {
-      "id": 34,
-      "begin": 13,
+      "id": 28,
+      "begin": 9,
       "end": 21,
-      "style": {}
-    },
-    {
-      "id": 35,
-      "begin": 27,
-      "end": 33,
-      "style": {}
-    },
-    {
-      "id": 36,
-      "begin": 13,
-      "end": 27,
-      "style": {}
-    },
-    {
-      "id": 37,
-      "begin": 21,
-      "end": 7,
-      "style": {}
-    },
-    {
-      "id": 38,
-      "begin": 27,
-      "end": 7,
       "style": {}
     }
   ],
   "anchors": [
     {
-      "id": 3,
-      "model": 2,
-      "x_offset": -56.5,
+      "id": 5,
+      "model": 4,
+      "x_offset": -45,
       "y_offset": 0,
       "style": {
         "name": "left"
       }
     },
     {
-      "id": 4,
-      "model": 2,
+      "id": 6,
+      "model": 4,
       "x_offset": 0,
-      "y_offset": -43.5,
+      "y_offset": -41,
       "style": {
         "name": "top"
       }
     },
     {
-      "id": 5,
-      "model": 2,
-      "x_offset": 56.5,
+      "id": 7,
+      "model": 4,
+      "x_offset": 45,
       "y_offset": 0,
       "style": {
         "name": "right"
       }
     },
     {
-      "id": 6,
-      "model": 2,
+      "id": 8,
+      "model": 4,
       "x_offset": 0,
-      "y_offset": 43.5,
+      "y_offset": 41,
       "style": {
         "name": "bottom"
       }
     },
     {
-      "id": 7,
-      "model": 2,
+      "id": 9,
+      "model": 4,
       "x_offset": 0,
       "y_offset": 0,
       "style": {
@@ -155,44 +133,44 @@
       }
     },
     {
-      "id": 9,
-      "model": 8,
-      "x_offset": -34,
+      "id": 11,
+      "model": 10,
+      "x_offset": -16,
       "y_offset": 0,
       "style": {
         "name": "left"
       }
     },
     {
-      "id": 10,
-      "model": 8,
+      "id": 12,
+      "model": 10,
       "x_offset": 0,
-      "y_offset": -54,
+      "y_offset": -17,
       "style": {
         "name": "top"
       }
     },
     {
-      "id": 11,
-      "model": 8,
-      "x_offset": 34,
+      "id": 13,
+      "model": 10,
+      "x_offset": 16,
       "y_offset": 0,
       "style": {
         "name": "right"
       }
     },
     {
-      "id": 12,
-      "model": 8,
+      "id": 14,
+      "model": 10,
       "x_offset": 0,
-      "y_offset": 54,
+      "y_offset": 17,
       "style": {
         "name": "bottom"
       }
     },
     {
-      "id": 13,
-      "model": 8,
+      "id": 15,
+      "model": 10,
       "x_offset": 0,
       "y_offset": 0,
       "style": {
@@ -288,51 +266,6 @@
       "style": {
         "name": "center"
       }
-    },
-    {
-      "id": 29,
-      "model": 28,
-      "x_offset": -41.5,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 30,
-      "model": 28,
-      "x_offset": 0,
-      "y_offset": -40.5,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 31,
-      "model": 28,
-      "x_offset": 41.5,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 32,
-      "model": 28,
-      "x_offset": 0,
-      "y_offset": 40.5,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 33,
-      "model": 28,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
     }
   ],
   "libraries": [
@@ -341,8 +274,8 @@
       "column": 10,
       "unit_height": 70,
       "unit_width": 80,
-      "id": 14,
-      "name": "library1",
+      "id": 2,
+      "name": "电力设备图标库",
       "src": "/static/imgs/800x630.png"
     },
     {
@@ -350,11 +283,11 @@
       "column": 3,
       "unit_height": 87,
       "unit_width": 87,
-      "id": 15,
-      "name": "library2",
+      "id": 3,
+      "name": "告警符号图标库",
       "src": "/static/imgs/warn_260x260.jpg"
     }
   ],
-  "width": 1000,
-  "height": 600
+  "width": 1847,
+  "height": 800
 }

@@ -70,14 +70,14 @@
 
     <form class="ui form" method="post" action="{{ request.path }}">
         <input type="submit" hidden name="submit">
-        <h3 class="ui dividing header">模型信息-ID={{ model.id }}</h3>
+        <h3 class="ui dividing header">模型信息-ID={{ model.id }}@{{ model.name }}</h3>
         <div class="field">
             <label><h4>基本信息</h4></label>
             <hr>
             <div class="six fields">
                 <div class="field">
                     <label>唯一名称</label>
-                    <input type="text" name="search_name" placeholder="唯一名称" value="{{ model.style.name }}">
+                    <input type="text" name="search_name" placeholder="唯一名称" value="{{ model.name }}">
                 </div>
                 <div class="field">
                     <label>显示字符串</label>
@@ -115,29 +115,62 @@
                     <input type="number" name="column" placeholder="列" value="{{ model.style.column }}">
                 </div>
                 <div class="field">
+                      <label>旋转角度</label>
+                      <input type="text" name="degree" value="{{ model.style.degree }}">
+                </div>
+                <div class="field">
+                    <label>翻转</label>
+                    <div class="ui checkbox">
+                      <input type="checkbox" name="v_scale" {% if model.style.v_scale == -1 %}checked{% endif %} value="-1">
+                      <label>垂直</label>
+                    </div>
+                    <div class="ui checkbox">
+                      <input type="checkbox" name="h_scale" {% if model.style.h_scale == -1 %}checked{% endif %} value="-1">
+                      <label>水平</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>外框</label>
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                            <input type="radio" name="show_boarder" value="1" {% if model.style.show_boarder %}checked{% endif %}>
+                            <label>显示</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                            <input type="radio" name="show_boarder" value="0" {% if not model.style.show_boarder %}checked{% endif %}>
+                            <label>隐藏</label>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
                     <label>库</label>
                     <div class="ui selection dropdown">
-                        <input type="hidden" name="library">
+                        <input type="hidden" name="library" value="{{ model.style.library }}">
                         <i class="dropdown icon"></i>
                         <div class="default text">{{ model.style.library }}</div>
                         <div class="menu">
                             {% for library in all_model.libraries %}
-                            <div class="item" data-value="{{ library.id }}">{{ library.name }}/{{ library.src }}</div>
+                            <div class="item" data-value="{{ library.id }}">{{ library.name }}@{{ library.src }}</div>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <table class="table center">
             {% for row in "012345678" %}
             <tr>
                 {% for column in "0123456789" %}
-                    <td {% if row == model.style.row and column == model.style.column %} class="selected" {% endif %} row="{{ row }}" column="{{ column }}" style="width: 80px; height: 70px; background: url('/static/imgs/800x630.png') -{% widthratio column 1 80 %}px -{% widthratio row 1 70 %}px no-repeat;">{% widthratio row 1 column %}</td>
+                    <td {% if row == model.style.row and column == model.style.column %} class="selected" {% endif %} row="{{ row }}" column="{{ column }}" style="width: 80px; height: 70px; background-size: cover; background: url('/static/imgs/800x630.png') -{% widthratio column 1 80 %}px -{% widthratio row 1 70 %}px no-repeat;">{% widthratio row 1 column %}</td>
                 {% endfor %}
             </tr>
             {% endfor %}
         </table>
-   </form>
+    </form>
 </body>
 </html>

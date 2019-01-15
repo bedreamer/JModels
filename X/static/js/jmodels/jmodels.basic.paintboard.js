@@ -53,7 +53,8 @@ var JPaintbord = function (dom_id, width, height, options) {
      * 为了避免图像闪烁，将slave画板的内容一次性拷贝到master画板
      * */
     this.update = function () {
-        this.master.clearRect(0, 0, this.width, this.height);
+        //this.master.clearRect(0, 0, this.width, this.height);
+        //this.master.fillRect(0, 0, this.width, this.height);
         this.master.drawImage(this.slave.canvas, 0, 0);
     };
 
@@ -112,7 +113,8 @@ JPaintbord.prototype.animate = function() {
 JPaintbord.prototype.render = function () {
     var ctx = this.ctx;
     // 清空画布
-    ctx.clearRect(0, 0, this.width, this.height);
+    //ctx.clearRect(0, 0, this.width, this.height);
+    ctx.fillRect(0, 0, this.width, this.height);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
 
     for (let i in this.links_list) {
@@ -136,8 +138,8 @@ JPaintbord.prototype.render = function () {
 /**
  * 通过具体的数据加载模型
  * */
-JPaintbord.prototype.load_model = function(id, x_offset, y_offset, width, height, style) {
-    this.models_list[id] = new JModel(id, this, x_offset, y_offset, width, height, style);
+JPaintbord.prototype.load_model = function(id, name, x_offset, y_offset, width, height, style) {
+    this.models_list[id] = new JModel(id, this, name, x_offset, y_offset, width, height, style);
     this._id_pool = this._id_pool > id ? this._id_pool : id;
     return this.models_list[id];
 };
@@ -187,7 +189,7 @@ JPaintbord.prototype.load = function(width, height, models, anchors, links, libr
         let y_zoom_index = this.height / height;
         for ( let i = 0, len = models.length; i < len; i ++ ) {
             let m = models[i];
-            this.load_model(m.id, m.x_offset * x_zoom_index, m.y_offset * y_zoom_index, m.width, m.height, m.style);
+            this.load_model(m.id, m.name, m.x_offset * x_zoom_index, m.y_offset * y_zoom_index, m.width, m.height, m.style);
         }
     }
 
