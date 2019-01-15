@@ -262,3 +262,28 @@ JPaintbord.prototype.search_image_library_by_name = function(name) {
     }
     return undefined;
 };
+
+/**
+ * 判断两个锚点是否是连接的
+ * */
+JPaintbord.prototype.is_linked = function (a, b) {
+    let test_list = [a, b];
+
+    for ( let idx in this.links_list) {
+        if (!this.links_list.hasOwnProperty(idx)) {
+            continue;
+        }
+        let link = this.links_list[idx];
+        if ( test_list.indexOf(link.end) < 0 ) {
+            continue;
+        }
+
+        if ( test_list.indexOf(link.end) < 0 ) {
+            continue;
+        }
+
+        return link;
+    }
+
+    return undefined;
+};

@@ -7,6 +7,17 @@ let JEditor = function (painter) {
     // 光标在模型移动位置象限
     this.in_move_model_arae = false;
 
+    // 选择的模型
+    this.model_selected = undefined;
+
+    // 选择的锚点栈
+    this.anchor_stack_selected = [];
+    // 跟随光标移动的线
+    this.hotlines_stack = [];
+
+    // 开始移动的点
+    this.move_begin_point = undefined;
+
     // 可编辑的最小模型宽度
     this.model_min_width = 30;
     // 可编辑的最小模型高度
@@ -103,6 +114,20 @@ JEditor.prototype.render = function(ctx) {
         }
         this.render_model(ctx, model_list[idx]);
     }
+
+    // 绘制热线
+    for ( let idx in this.hotlines_stack ) {
+        if ( !this.hotlines_stack.hasOwnProperty(idx) ) {
+            continue;
+        }
+        let hotline = this.hotlines_stack[idx];
+        ctx.save();
+        ctx.strokeStyle = 'blue';
+        ctx.moveTo(hotline.begin_x, hotline.begin_y);
+        ctx.lineTo(hotline.end_x, hotline.end_y);
+        ctx.stroke();
+        ctx.restore();
+    }
 };
 
 
@@ -120,6 +145,11 @@ JEditor.prototype.update = function () {
  * 在当前的模型列表终新建一个模型
  * */
 JEditor.prototype.create_link = function (begin, end, style) {
+    if ( begin === end ) {
+        console.warn("不允许锚点连接自身！");
+        return undefined;
+    }
+
     let id = ++ this.painter._id_pool;
     if ( typeof begin != 'object' ) {
         let target = this.painter.search_anchor(begin);
@@ -136,6 +166,11 @@ JEditor.prototype.create_link = function (begin, end, style) {
             return undefined;
         }
         end = target;
+    }
+
+    if ( begin.model === begin.end ) {
+        console.warn("不允许模型自身的锚点连接！");
+        return;
     }
 
     let link = new JLink(id, begin, end, style);
@@ -268,6 +303,35 @@ JEditor.prototype.select_model = function (ev) {
     }
 };
 
+
+/**
+ * 选择锚点
+ * */
+JEditor.prototype.select_anchor = function (ev) {
+    for ( let id in this.painter.anchors_list ) {
+        if ( !this.painter.anchors_list.hasOwnProperty(id) ) {
+            continue;
+        }
+        let anchor = this.painter.anchors_list[id];
+
+        if ( anchor.x > ev.offsetX ) {
+            continue;
+        }
+        if ( anchor.x + anchor.width < ev.offsetX ) {
+            continue;
+        }
+        if ( anchor.y > ev.offsetY ) {
+            continue;
+        }
+        if ( anchor.y + anchor.height < ev.offsetY ) {
+            continue;
+        }
+
+        return anchor;
+    }
+};
+
+
 /**
  * 更新模型的位置
  **/
@@ -328,6 +392,18 @@ JEditor.prototype.update_model_size = function(model, new_width, new_height) {
  * 鼠标移动事件
  */
 JEditor.prototype.onmousemove = function (ev) {
+    // 跟踪热线位置
+    if ( this.anchor_stack_selected.length > 0) {
+        for (let idx in this.hotlines_stack) {
+            if (!this.hotlines_stack.hasOwnProperty(idx)) {
+                continue;
+            }
+            let hot_line = this.hotlines_stack[idx];
+            hot_line.update_endpoint(ev.offsetX, ev.offsetY);
+        }
+        this.update();
+    }
+
     if ( ! this.down_point_while_move ) {
         return;
     }
@@ -360,12 +436,39 @@ JEditor.prototype.onmousemove = function (ev) {
     this.update();
 };
 
+/**
+ * 连接热线对象
+ * */
+let JHotline = function(begin_x, begin_y) {
+    this.begin_x = begin_x;
+    this.begin_y = begin_y;
+    this.end_x = begin_x;
+    this.end_y = begin_y;
+};
+JHotline.prototype.update_endpoint = function(end_x, end_y) {
+    this.end_x = end_x;
+    this.end_y = end_y;
+};
+
+
 /***
  *
  * 鼠标按下事件
  */
 JEditor.prototype.onmousedown = function (ev) {
+    let anchor = this.select_anchor(ev);
+
+    // 只允许将锚点压栈一次
+    if ( anchor && this.anchor_stack_selected.indexOf(anchor) < 0 ) {
+        this.anchor_stack_selected.push(anchor);
+        let hotline = new JHotline(ev.offsetX, ev.offsetY);
+        this.hotlines_stack.push(hotline);
+        return;
+    }
+
+    // 编辑模式下梳鼠标按下后应该优先选择锚点，然后选择模型
     let model = this.select_model(ev);
+
     if ( model ) {
         this.down_point_while_move = ev;
         this.model_selected = model;
@@ -391,6 +494,16 @@ JEditor.prototype.onmousedown = function (ev) {
  * 鼠标弹起事件
  */
 JEditor.prototype.onmouseup = function (ev) {
+    let anchor = this.select_anchor(ev);
+
+    if ( anchor && this.anchor_stack_selected.indexOf(anchor) < 0 ) {
+        let begin_anchor = this.anchor_stack_selected.pop();
+
+        // 现在已经有两个锚点了，判断一下：若还没有建立过连接，则新建一个连接
+        let link = this.painter.is_linked(anchor, begin_anchor) ? undefined : this.create_link(begin_anchor, anchor, {});
+        console.log(link);
+    }
+
     let model = this.select_model(ev);
 
     if ( this.model_selected !== undefined ) {
@@ -400,6 +513,11 @@ JEditor.prototype.onmouseup = function (ev) {
     this.painter.dom.style.cursor = 'auto';
     this.model_selected = undefined;
     this.move_begin_point = undefined;
+
+    // 清空锚点选择栈
+    this.anchor_stack_selected = [];
+    // 清空热线
+    this.hotlines_stack = [];
 };
 
 /***
