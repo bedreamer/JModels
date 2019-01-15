@@ -186,8 +186,8 @@ JPaintbord.prototype.load = function(width, height, models, anchors, links, libr
     }
 
     if ( models ) {
-        let x_zoom_index = this.width / width;
-        let y_zoom_index = this.height / height;
+        let x_zoom_index = (true === true ? 1 : this.width / width);
+        let y_zoom_index = (true === true ? 1 : this.height / height);
         for ( let i = 0, len = models.length; i < len; i ++ ) {
             let m = models[i];
             this.load_model(m.id, m.name, m.x_offset * x_zoom_index, m.y_offset * y_zoom_index, m.width, m.height, m.style);
@@ -248,4 +248,17 @@ JPaintbord.prototype.search_image_library = function (id) {
     return this.image_libraries_list[id];
 };
 JPaintbord.prototype.search_image_library_by_id = JPaintbord.prototype.search_image_library;
-JPaintbord.prototype.search_image_library_by_name = function(name) {};
+JPaintbord.prototype.search_image_library_by_name = function(name) {
+    for ( let idx in this.image_libraries_list ) {
+        if ( ! this.image_libraries_list.hasOwnProperty(idx) ) {
+            continue;
+        }
+
+        let library = this.image_libraries_list[idx];
+        if ( library.name !== name ) {
+            continue;
+        }
+        return library;
+    }
+    return undefined;
+};

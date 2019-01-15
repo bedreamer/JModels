@@ -16,6 +16,9 @@ let JModel = function (id, painter, name, x_offset, y_offset, width, height, sty
     if ( style === undefined ) style = {};
     if ( style.showed === undefined ) style.showed = true;
     this.style = style;
+    if ( style.row === undefined ) style.row = 0;
+    if ( style.column === undefined ) style.column = 0;
+    if ( style.show_boarder === undefined ) style.show_boarder = true;
 
     // 模型上绑定的图片列表，可以通过image_switch函数切换
     this.images_list = {};
@@ -23,7 +26,7 @@ let JModel = function (id, painter, name, x_offset, y_offset, width, height, sty
     if ( style.library ) {
         this.library = this.painter.search_image_library(style.library);
     } else {
-        this.library = undefined;
+        this.library = this.painter.search_image_library_by_name("Jmodel");
     }
 
     // 所有的锚点都需要注册在这里

@@ -1,69 +1,11 @@
 {
   "models": [
     {
-      "id": 4,
-      "name": "model_4",
+      "id": 6,
+      "name": "model_6",
       "painter": 1,
-      "x_offset": 456,
-      "y_offset": 236,
-      "width": 88,
-      "height": 83,
-      "style": {
-        "showed": true,
-        "row": 6,
-        "column": 3,
-        "library": 2,
-        "degree": 0,
-        "v_scale": 1,
-        "h_scale": -1,
-        "hide_boarder": false,
-        "show_boarder": true
-      }
-    },
-    {
-      "id": 10,
-      "name": "model_10",
-      "painter": 1,
-      "x_offset": 412,
-      "y_offset": 194,
-      "width": 44,
-      "height": 47,
-      "style": {
-        "showed": true,
-        "row": 1,
-        "column": 1,
-        "library": 3,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0,
-        "show_boarder": false
-      }
-    },
-    {
-      "id": 16,
-      "name": "model_16",
-      "painter": 1,
-      "x_offset": 1179,
-      "y_offset": 228,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "showed": true,
-        "row": 2,
-        "column": 4,
-        "library": 2,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0,
-        "show_boarder": true
-      }
-    },
-    {
-      "id": 22,
-      "name": "model_22",
-      "painter": 1,
-      "x_offset": 336,
-      "y_offset": 412,
+      "x_offset": 278,
+      "y_offset": 238,
       "width": 80,
       "height": 80,
       "style": {
@@ -73,378 +15,52 @@
         "library": 2,
         "v_scale": 1,
         "h_scale": 1,
-        "degree": 0,
+        "degree": 0.0,
         "show_boarder": true
-      }
-    },
-    {
-      "id": 29,
-      "name": "model_29",
-      "painter": 1,
-      "x_offset": 185,
-      "y_offset": 118,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "showed": true,
-        "row": 0,
-        "column": 0,
-        "library": 35,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0,
-        "show_boarder": true
-      }
-    },
-    {
-      "id": 36,
-      "name": "model_36",
-      "painter": 1,
-      "x_offset": 596,
-      "y_offset": 506,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "showed": true
-      }
-    },
-    {
-      "id": 42,
-      "name": "model_42",
-      "painter": 1,
-      "x_offset": 819,
-      "y_offset": 503,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "showed": true
       }
     }
   ],
-  "links": [
-    {
-      "id": 28,
-      "begin": 9,
-      "end": 21,
-      "style": {}
-    },
-    {
-      "id": 49,
-      "begin": 39,
-      "end": 43,
-      "style": {}
-    }
-  ],
+  "links": [],
   "anchors": [
     {
-      "id": 5,
-      "model": 4,
-      "x_offset": -44,
+      "id": 7,
+      "model": 6,
+      "x_offset": -40,
       "y_offset": 0,
       "style": {
         "name": "left"
-      }
-    },
-    {
-      "id": 6,
-      "model": 4,
-      "x_offset": 0,
-      "y_offset": -41.5,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 7,
-      "model": 4,
-      "x_offset": 44,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
       }
     },
     {
       "id": 8,
-      "model": 4,
+      "model": 6,
       "x_offset": 0,
-      "y_offset": 41.5,
+      "y_offset": -40,
       "style": {
-        "name": "bottom"
+        "name": "top"
       }
     },
     {
       "id": 9,
-      "model": 4,
-      "x_offset": 0,
+      "model": 6,
+      "x_offset": 40,
       "y_offset": 0,
       "style": {
-        "name": "center"
+        "name": "right"
+      }
+    },
+    {
+      "id": 10,
+      "model": 6,
+      "x_offset": 0,
+      "y_offset": 40,
+      "style": {
+        "name": "bottom"
       }
     },
     {
       "id": 11,
-      "model": 10,
-      "x_offset": -22,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 12,
-      "model": 10,
-      "x_offset": 0,
-      "y_offset": -23.5,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 13,
-      "model": 10,
-      "x_offset": 22,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 14,
-      "model": 10,
-      "x_offset": 0,
-      "y_offset": 23.5,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 15,
-      "model": 10,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 17,
-      "model": 16,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 18,
-      "model": 16,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 19,
-      "model": 16,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 20,
-      "model": 16,
-      "x_offset": 0,
-      "y_offset": 40,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 21,
-      "model": 16,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 23,
-      "model": 22,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 24,
-      "model": 22,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 25,
-      "model": 22,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 26,
-      "model": 22,
-      "x_offset": 0,
-      "y_offset": 40,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 27,
-      "model": 22,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 30,
-      "model": 29,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 31,
-      "model": 29,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 32,
-      "model": 29,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 33,
-      "model": 29,
-      "x_offset": 0,
-      "y_offset": 40,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 34,
-      "model": 29,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 37,
-      "model": 36,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 38,
-      "model": 36,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 39,
-      "model": 36,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 40,
-      "model": 36,
-      "x_offset": 0,
-      "y_offset": 40,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 41,
-      "model": 36,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 43,
-      "model": 42,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 44,
-      "model": 42,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 45,
-      "model": 42,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 46,
-      "model": 42,
-      "x_offset": 0,
-      "y_offset": 40,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 47,
-      "model": 42,
+      "model": 6,
       "x_offset": 0,
       "y_offset": 0,
       "style": {
@@ -454,33 +70,42 @@
   ],
   "libraries": [
     {
+      "row": 1,
+      "column": 1,
+      "unit_height": 100,
+      "unit_width": 100,
+      "id": 2,
+      "name": "Jmodel",
+      "src": "data:image/png;base64,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"
+    },
+    {
       "row": 9,
       "column": 10,
       "unit_height": 70,
       "unit_width": 80,
-      "id": 2,
-      "name": "电力设备图标库",
-      "src": "/static/imgs/800x630.png"
-    },
-    {
-      "row": 3,
-      "column": 3,
-      "unit_height": 87,
-      "unit_width": 87,
       "id": 3,
-      "name": "告警符号图标库1",
-      "src": "/static/imgs/warn_260x260.jpg"
+      "name": "电力设备图标库1",
+      "src": "/static/imgs/800x630.png"
     },
     {
       "row": 1,
       "column": 7,
       "unit_height": 100,
       "unit_width": 100,
-      "id": 35,
+      "id": 4,
       "name": "告警符号图标库2",
       "src": "/static/imgs/700x100.png"
+    },
+    {
+      "row": 3,
+      "column": 3,
+      "unit_height": 87,
+      "unit_width": 87,
+      "id": 5,
+      "name": "告警符号图标库",
+      "src": "/static/imgs/warn_260x260.jpg"
     }
   ],
-  "width": 1847,
+  "width": 1001,
   "height": 800
 }

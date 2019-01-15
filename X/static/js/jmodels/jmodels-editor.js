@@ -34,8 +34,11 @@ JEditor.prototype.render_link = function(ctx, link) {
  * 绘制编辑模式下的锚点补充内容
  * */
 JEditor.prototype.render_anchor = function(ctx, anchor) {
+    ctx.save();
     ctx.strokeRect(anchor.x, anchor.y, anchor.width, anchor.height);
+    ctx.fillStyle = 'red';
     ctx.fillText(anchor.id, anchor.x, anchor.y);
+    ctx.restore();
 };
 
 
