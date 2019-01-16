@@ -1,184 +1,54 @@
 {
   "models": [
     {
-      "id": 6,
-      "name": "model_6",
+      "id": 7,
+      "name": "model_7",
       "painter": 1,
-      "x_offset": 141,
-      "y_offset": 338,
+      "x_offset": 339,
+      "y_offset": 234,
       "width": 80,
       "height": 80,
       "style": {
-        "library": 4,
+        "library": 6,
         "showed": true,
         "row": 0,
-        "column": 7,
-        "show_boarder": false,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0
-      }
-    },
-    {
-      "id": 12,
-      "name": "model_12",
-      "painter": 1,
-      "x_offset": 402,
-      "y_offset": 185,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "library": 4,
-        "showed": true,
-        "row": 0,
-        "column": 6,
-        "show_boarder": false,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0
-      }
-    },
-    {
-      "id": 18,
-      "name": "model_18",
-      "painter": 1,
-      "x_offset": 410,
-      "y_offset": 488,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "library": 4,
-        "showed": true,
-        "row": 0,
-        "column": 6,
-        "show_boarder": false,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0
-      }
-    },
-    {
-      "id": 24,
-      "name": "model_24",
-      "painter": 1,
-      "x_offset": 601,
-      "y_offset": 312,
-      "width": 20,
-      "height": 20,
-      "style": {
-        "library": 4,
-        "showed": true,
-        "row": 0,
-        "column": 6,
-        "show_boarder": true,
-        "v_scale": 1,
-        "h_scale": 1,
-        "degree": 0
+        "column": 2,
+        "show_boarder": true
       }
     }
   ],
-  "links": [
-    {
-      "id": 26,
-      "begin": 23,
-      "end": 25,
-      "style": {}
-    },
-    {
-      "id": 27,
-      "begin": 17,
-      "end": 25,
-      "style": {}
-    },
-    {
-      "id": 28,
-      "begin": 17,
-      "end": 11,
-      "style": {}
-    },
-    {
-      "id": 29,
-      "begin": 23,
-      "end": 11,
-      "style": {}
-    }
-  ],
+  "links": [],
   "anchors": [
     {
-      "id": 7,
-      "model": 6,
+      "id": 8,
+      "model": 7,
       "x_offset": -40,
       "y_offset": 0,
       "style": {
         "name": "left"
-      }
-    },
-    {
-      "id": 8,
-      "model": 6,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
       }
     },
     {
       "id": 9,
-      "model": 6,
-      "x_offset": 40,
-      "y_offset": 0,
+      "model": 7,
+      "x_offset": 0,
+      "y_offset": -40,
       "style": {
-        "name": "right"
+        "name": "top"
       }
     },
     {
       "id": 10,
-      "model": 6,
-      "x_offset": 0,
-      "y_offset": 40,
+      "model": 7,
+      "x_offset": 40,
+      "y_offset": 0,
       "style": {
-        "name": "bottom"
+        "name": "right"
       }
     },
     {
       "id": 11,
-      "model": 6,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 13,
-      "model": 12,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 14,
-      "model": 12,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 15,
-      "model": 12,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 16,
-      "model": 12,
+      "model": 7,
       "x_offset": 0,
       "y_offset": 40,
       "style": {
@@ -186,62 +56,8 @@
       }
     },
     {
-      "id": 17,
-      "model": 12,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 19,
-      "model": 18,
-      "x_offset": -40,
-      "y_offset": 0,
-      "style": {
-        "name": "left"
-      }
-    },
-    {
-      "id": 20,
-      "model": 18,
-      "x_offset": 0,
-      "y_offset": -40,
-      "style": {
-        "name": "top"
-      }
-    },
-    {
-      "id": 21,
-      "model": 18,
-      "x_offset": 40,
-      "y_offset": 0,
-      "style": {
-        "name": "right"
-      }
-    },
-    {
-      "id": 22,
-      "model": 18,
-      "x_offset": 0,
-      "y_offset": 40,
-      "style": {
-        "name": "bottom"
-      }
-    },
-    {
-      "id": 23,
-      "model": 18,
-      "x_offset": 0,
-      "y_offset": 0,
-      "style": {
-        "name": "center"
-      }
-    },
-    {
-      "id": 25,
-      "model": 24,
+      "id": 12,
+      "model": 7,
       "x_offset": 0,
       "y_offset": 0,
       "style": {
@@ -285,8 +101,17 @@
       "id": 5,
       "name": "告警符号图标库",
       "src": "/static/imgs/warn_260x260.jpg"
+    },
+    {
+      "row": 4,
+      "column": 5,
+      "unit_height": 180,
+      "unit_width": 185,
+      "id": 6,
+      "name": "告警符号图标库",
+      "src": "/static/imgs/930x720_5x4.png"
     }
   ],
-  "width": 1847,
+  "width": 1951.2,
   "height": 800
 }
