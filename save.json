@@ -37,6 +37,22 @@
         "h_scale": 1,
         "degree": 0
       }
+    },
+    {
+      "id": 18,
+      "name": "model_18",
+      "painter": 1,
+      "x_offset": 721,
+      "y_offset": 351,
+      "width": 80,
+      "height": 80,
+      "style": {
+        "library": 2,
+        "showed": true,
+        "row": 0,
+        "column": 0,
+        "show_boarder": true
+      }
     }
   ],
   "links": [],
@@ -125,6 +141,51 @@
     {
       "id": 17,
       "model": 12,
+      "x_offset": 0,
+      "y_offset": 0,
+      "style": {
+        "name": "center"
+      }
+    },
+    {
+      "id": 19,
+      "model": 18,
+      "x_offset": -40,
+      "y_offset": 0,
+      "style": {
+        "name": "left"
+      }
+    },
+    {
+      "id": 20,
+      "model": 18,
+      "x_offset": 0,
+      "y_offset": -40,
+      "style": {
+        "name": "top"
+      }
+    },
+    {
+      "id": 21,
+      "model": 18,
+      "x_offset": 40,
+      "y_offset": 0,
+      "style": {
+        "name": "right"
+      }
+    },
+    {
+      "id": 22,
+      "model": 18,
+      "x_offset": 0,
+      "y_offset": 40,
+      "style": {
+        "name": "bottom"
+      }
+    },
+    {
+      "id": 23,
+      "model": 18,
       "x_offset": 0,
       "y_offset": 0,
       "style": {
