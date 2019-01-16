@@ -274,15 +274,9 @@ JPaintbord.prototype.is_linked = function (a, b) {
             continue;
         }
         let link = this.links_list[idx];
-        if ( test_list.indexOf(link.end) < 0 ) {
-            continue;
+        if ( test_list.indexOf(link.end) >= 0 && test_list.indexOf(link.begin) >= 0 ) {
+            return link;
         }
-
-        if ( test_list.indexOf(link.end) < 0 ) {
-            continue;
-        }
-
-        return link;
     }
 
     return undefined;

@@ -10,10 +10,20 @@ let JEditor = function (painter) {
     // 选择的模型
     this.model_selected = undefined;
 
-    // 选择的锚点栈
+    // 选择的锚点栈, 左键按下选择，左键弹起清空
     this.anchor_stack_selected = [];
-    // 跟随光标移动的线
+    // 动态显示的锚点, 光标移动到锚点上时可以高亮显示，光标移入范围选择，移出范围清空
+    this.hot_anchors_stack = [];
+    // 跟随光标移动的线，选择锚点时激活，光标移动时更新，左键弹起时清空
     this.hotlines_stack = [];
+    // 改变大小的对象选择栈，左键点击对象的第四象限时选择，光标移动时更新，左键弹起时清空
+    this.resize_models_stack = [];
+    // 改变位置的对象选择栈，左键点击对象的第一、二、三象限时选择，光标移动时更新，左键弹起时清空
+    this.change_location_models_statck = [];
+    // 选择的模型基本属性栈，选择时压入，左键弹起时清空
+    this.attribute_of_selected_model_statck = {};
+    // 光标移动的位置记录, 左键按下时记录，左键弹起时清空
+    this.cursor_motion_stack = [];
 
     // 开始移动的点
     this.move_begin_point = undefined;
@@ -115,6 +125,19 @@ JEditor.prototype.render = function(ctx) {
         this.render_model(ctx, model_list[idx]);
     }
 
+    // 绘制热锚点
+    for ( let idx in this.hot_anchors_stack ) {
+        if ( !this.hot_anchors_stack.hasOwnProperty(idx) ) {
+            continue;
+        }
+        let anchor = this.hot_anchors_stack[idx];
+        ctx.save();
+        ctx.strokeStyle = 'blue';
+        ctx.strokeRect(anchor.x - 3, anchor.y - 3, anchor.width + 3 * 2, anchor.height + 3 * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
     // 绘制热线
     for ( let idx in this.hotlines_stack ) {
         if ( !this.hotlines_stack.hasOwnProperty(idx) ) {
@@ -145,12 +168,17 @@ JEditor.prototype.update = function () {
  * 在当前的模型列表终新建一个模型
  * */
 JEditor.prototype.create_link = function (begin, end, style) {
+    let linked = this.painter.is_linked(begin, end);
+    if ( linked ) {
+        console.warn("锚点已经有过连接!");
+        return undefined;
+    }
+
     if ( begin === end ) {
         console.warn("不允许锚点连接自身！");
         return undefined;
     }
 
-    let id = ++ this.painter._id_pool;
     if ( typeof begin != 'object' ) {
         let target = this.painter.search_anchor(begin);
         if ( ! target ) {
@@ -168,11 +196,12 @@ JEditor.prototype.create_link = function (begin, end, style) {
         end = target;
     }
 
-    if ( begin.model === begin.end ) {
+    if ( begin.model === end.model ) {
         console.warn("不允许模型自身的锚点连接！");
         return;
     }
 
+    let id = ++ this.painter._id_pool;
     let link = new JLink(id, begin, end, style);
     this.painter.links_list[id] = link;
     return link;
@@ -267,6 +296,48 @@ JEditor.prototype.save = function () {
 JEditor.prototype.load = function (obj) {
     this.painter.load(obj.width, obj.height, obj.models, obj.anchors, obj.links, obj.libraries);
 };
+
+
+/**
+ * 判断光标是否在改变大小的区域
+ * */
+JEditor.prototype.is_cursor_in_model_resize_area = function(model, ev) {
+    if ( model.x > ev.offsetX ) {
+        return false;
+    }
+    if ( model.x + model.width < ev.offsetX ) {
+        return false;
+    }
+    if ( model.y > ev.offsetY ) {
+        return false;
+    }
+    if ( model.y + model.height < ev.offsetY ) {
+        return false;
+    }
+
+    return ev.offsetX > model.x_offset && ev.offsetY > model.y_offset;
+};
+
+/**
+ * 判断光标是否在改变位置的区域内
+ * */
+JEditor.prototype.is_cursor_in_model_change_location_area = function(model, ev) {
+    if ( model.x > ev.offsetX ) {
+        return false;
+    }
+    if ( model.x + model.width < ev.offsetX ) {
+        return false;
+    }
+    if ( model.y > ev.offsetY ) {
+        return false;
+    }
+    if ( model.y + model.height < ev.offsetY ) {
+        return false;
+    }
+
+    return !(ev.offsetX > model.x_offset && ev.offsetY > model.y_offset);
+};
+
 
 /**
  * 选择模型
@@ -392,7 +463,18 @@ JEditor.prototype.update_model_size = function(model, new_width, new_height) {
  * 鼠标移动事件
  */
 JEditor.prototype.onmousemove = function (ev) {
-    // 跟踪热线位置
+    let update_request = 0;
+
+    // 跟踪热锚点位置, 光标移动至锚点上时用不同颜色的框描出边框
+    let anchor = this.select_anchor(ev);
+    if ( anchor && this.hot_anchors_stack.indexOf(anchor) < 0 ) {
+        this.hot_anchors_stack.push(anchor);
+        update_request ++;
+    } else {
+        this.hot_anchors_stack = [];
+    }
+
+    // 跟踪热线位置，随着光标的移动动态的绘制出连接线的位置
     if ( this.anchor_stack_selected.length > 0) {
         for (let idx in this.hotlines_stack) {
             if (!this.hotlines_stack.hasOwnProperty(idx)) {
@@ -400,40 +482,63 @@ JEditor.prototype.onmousemove = function (ev) {
             }
             let hot_line = this.hotlines_stack[idx];
             hot_line.update_endpoint(ev.offsetX, ev.offsetY);
+            update_request ++;
         }
-        this.update();
     }
 
-    if ( ! this.down_point_while_move ) {
-        return;
+    let delta_x = 0, delta_y = 0;
+    if ( this.cursor_motion_stack.length ) {
+        delta_x = ev.offsetX - this.cursor_motion_stack[0].offsetX;
+        delta_y = ev.offsetY - this.cursor_motion_stack[0].offsetY;
     }
 
-    if ( ! this.model_selected ) {
-        return;
-    }
+    // 有位置变化时才进行更新操作，避免多次绘制
+    if (delta_x || delta_y) {
+        // 有改变模型位置的选择对象
+        if (this.change_location_models_statck.length) {
+            this.painter.dom.style.cursor = 'move';
 
-    let delta_x = ev.offsetX - this.down_point_while_move.offsetX;
-    let delta_y = ev.offsetY - this.down_point_while_move.offsetY;
+            for(let i = 0, length = this.change_location_models_statck.length; i < length; i ++) {
+                let model = this.change_location_models_statck[i];
+                let attribute = this.attribute_of_selected_model_statck[model.id];
 
-    if ( this.in_move_model_arae ) {
-        let new_x_offset = this.model_x_offset_while_mousedown + delta_x;
-        let new_y_offset = this.model_y_offset_while_mousedown + delta_y;
-        this.update_model_location(this.model_selected, new_x_offset, new_y_offset);
-    }
-
-    if ( this.in_resize_model_arae ) {
-        let new_width = this.model_width_while_mousedown + delta_x;
-        if ( new_width <= 20 ) {
-            new_width = 20;
+                let new_x_offset = attribute.x_offset + delta_x;
+                let new_y_offset = attribute.y_offset + delta_y;
+                this.update_model_location(model, new_x_offset, new_y_offset);
+                update_request ++;
+            }
         }
-        let new_height = this.model_height_while_mousedown + delta_y;
-        if ( new_height <= 20 ) {
-            new_height = 20;
-        }
-        this.update_model_size(this.model_selected, new_width, new_height);
     }
 
-    this.update();
+    // 有位置变化时才进行更新操作，避免多次绘制
+    if (delta_x || delta_y) {
+        // 有改变模型大小的选择对象
+        if (this.resize_models_stack.length) {
+            this.painter.dom.style.cursor = 'nw-resize';
+
+            for(let i =0, length = this.resize_models_stack.length; i < length; i ++) {
+                let model = this.resize_models_stack[i];
+                let attribute = this.attribute_of_selected_model_statck[model.id];
+                let new_width = attribute.width + delta_x;
+                if (new_width <= 20) {
+                    new_width = 20;
+                }
+                let new_height = attribute.height + delta_y;
+                if (new_height <= 20) {
+                    new_height = 20;
+                }
+                this.update_model_size(model, new_width, new_height);
+                update_request ++;
+            }
+        }
+    }
+
+    if ( update_request){
+        console.log(update_request);
+    }
+
+    // 整体重绘一次，提高效率
+    return update_request ? this.update() : undefined;
 };
 
 /**
@@ -461,14 +566,36 @@ JEditor.prototype.onmousedown = function (ev) {
     // 只允许将锚点压栈一次
     if ( anchor && this.anchor_stack_selected.indexOf(anchor) < 0 ) {
         this.anchor_stack_selected.push(anchor);
-        let hotline = new JHotline(ev.offsetX, ev.offsetY);
-        this.hotlines_stack.push(hotline);
+        let hot_line = new JHotline(ev.offsetX, ev.offsetY);
+        this.hotlines_stack.push(hot_line);
         return;
     }
 
     // 编辑模式下梳鼠标按下后应该优先选择锚点，然后选择模型
     let model = this.select_model(ev);
+    if ( !model ) return;
 
+    let attribute = {
+        x_offset: model.x_offset,
+        y_offset: model.y_offset,
+        width: model.width,
+        height: model.height
+    };
+
+    if (this.is_cursor_in_model_change_location_area(model, ev)) {
+        if ( this.change_location_models_statck.indexOf(model) < 0 ) {
+            this.change_location_models_statck.push(model);
+        }
+    } else { //if (this.is_cursor_in_model_resize_area(model, ev) ) {
+        if ( this.resize_models_stack.indexOf(model) < 0 ) {
+            this.resize_models_stack.push(model);
+        }
+    }
+
+    this.attribute_of_selected_model_statck[model.id] = attribute;
+    this.cursor_motion_stack.push(ev);
+
+    /*
     if ( model ) {
         this.down_point_while_move = ev;
         this.model_selected = model;
@@ -487,6 +614,7 @@ JEditor.prototype.onmousedown = function (ev) {
             this.painter.dom.style.cursor = 'nw-resize';
         }
     }
+    */
 };
 
 /***
@@ -500,7 +628,7 @@ JEditor.prototype.onmouseup = function (ev) {
         let begin_anchor = this.anchor_stack_selected.pop();
 
         // 现在已经有两个锚点了，判断一下：若还没有建立过连接，则新建一个连接
-        let link = this.painter.is_linked(anchor, begin_anchor) ? undefined : this.create_link(begin_anchor, anchor, {});
+        let link = this.create_link(begin_anchor, anchor, {});
         console.log(link);
     }
 
@@ -514,10 +642,20 @@ JEditor.prototype.onmouseup = function (ev) {
     this.model_selected = undefined;
     this.move_begin_point = undefined;
 
-    // 清空锚点选择栈
+    // 清空锚点选择栈,左键按下时选择，左键弹起时清空
     this.anchor_stack_selected = [];
-    // 清空热线
+    // 动态显示的锚点, 光标移动到锚点上时可以高亮显示，光标移入范围选择，移出范围清空
+    this.hot_anchors_stack = [];
+    // 跟随光标移动的线，选择锚点时激活，光标移动时更新，左键弹起时清空
     this.hotlines_stack = [];
+    // 改变大小的对象选择栈，左键点击对象的第四象限时选择，光标移动时更新，左键弹起时清空
+    this.resize_models_stack = [];
+    // 改变位置的对象选择栈，左键点击对象的第一、二、三象限时选择，光标移动时更新，左键弹起时清空
+    this.change_location_models_statck = [];
+    // 选择的模型基本属性栈，选择时压入，左键弹起时清空
+    this.attribute_of_selected_model_statck = {};
+    // 光标移动的位置记录, 左键按下压栈两次，光标移动时更新最后一个，左键弹起时清空
+    this.cursor_motion_stack = [];
 };
 
 /***

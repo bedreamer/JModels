@@ -14,17 +14,24 @@ let JModel = function (id, painter, name, x_offset, y_offset, width, height, sty
     this.name = name;
 
     if ( style === undefined ) style = {};
-    if ( style.showed === undefined ) style.showed = true;
     this.style = style;
-    if ( style.row === undefined ) style.row = 0;
-    if ( style.column === undefined ) style.column = 0;
-    if ( style.show_boarder === undefined ) style.show_boarder = true;
+    if ( this.style.showed === undefined )
+        this.style.showed = true;
+
+    if ( this.style.row === undefined )
+        this.style.row = 0;
+
+    if ( this.style.column === undefined )
+        this.style.column = 0;
+
+    if ( this.style.show_boarder === undefined )
+        this.style.show_boarder = true;
 
     // 模型上绑定的图片列表，可以通过image_switch函数切换
     this.images_list = {};
 
-    if ( style.library ) {
-        this.library = this.painter.search_image_library(style.library);
+    if ( this.style.library ) {
+        this.library = this.painter.search_image_library(this.style.library);
     } else {
         this.library = this.painter.search_image_library_by_name("Jmodel");
     }
