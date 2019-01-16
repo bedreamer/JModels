@@ -16,8 +16,11 @@
     <script>
         $(document).ready(function () {
             $('.ui.dropdown').dropdown();
+            $('.menu .item').tab();
+
 
             $("td").click(function () {
+                $("input[name=library]").val($(this).attr('library'));
                 $("input[name=row]").val($(this).attr('row'));
                 $("input[name=column]").val($(this).attr('column'));
             });
@@ -107,14 +110,6 @@
             <hr>
             <div class="six fields">
                 <div class="field">
-                    <label>行</label>
-                    <input type="number" name="row" placeholder="行" value="{{ model.style.row }}">
-                </div>
-                <div class="field">
-                    <label>列</label>
-                    <input type="number" name="column" placeholder="列" value="{{ model.style.column }}">
-                </div>
-                <div class="field">
                       <label>旋转角度</label>
                       <input type="text" name="degree" value="{{ model.style.degree }}">
                 </div>
@@ -146,31 +141,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="field">
-                    <label>库</label>
-                    <div class="ui selection dropdown">
-                        <input type="hidden" name="library" value="{{ model.style.library }}">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">{{ model.style.library }}</div>
-                        <div class="menu">
-                            {% for library in all_model.libraries %}
-                            <div class="item" data-value="{{ library.id }}">{{ library.name }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <table class="table center">
-            {% for row in "012345678" %}
-            <tr>
-                {% for column in "0123456789" %}
-                    <td {% if row == model.style.row and column == model.style.column %} class="selected" {% endif %} row="{{ row }}" column="{{ column }}" style="width: 80px; height: 70px; background-size: cover; background: url('/static/imgs/800x630.png') -{% widthratio column 1 80 %}px -{% widthratio row 1 70 %}px no-repeat;">{% widthratio row 1 column %}</td>
-                {% endfor %}
-            </tr>
+        <div class="ui top attached tabular menu">
+            <input type="hidden" name="library" value="{{ model.style.library }}">
+            <input hidden type="number" name="row" placeholder="行" value="{{ model.style.row }}">
+            <input hidden type="number" name="column" placeholder="列" value="{{ model.style.column }}">
+            {% for library in all_model.libraries %}
+            <a class="item {% if model.style.library == library.id %}active{% endif %}" data-tab="{{ library.id }}">{{ library.name }}({{ library.unit_width }}x{{ library.unit_height }})</a>
             {% endfor %}
-        </table>
+        </div>
+
+        {% for library in all_model.libraries %}
+        <div class="ui bottom attached tab segment {% if model.style.library == library.id %}active{% endif %}" data-tab="{{ library.id }}">
+            <table class="table center">
+                {% for row in "012345678" %}
+                    {% if forloop.counter0 < library.row %}
+                <tr>
+                    {% for column in "0123456789" %}
+                        {% if forloop.counter0 < library.column %}
+                        <td {% if row == model.style.row and column == model.style.column %} class="selected" {% endif %} library="{{ library.id }}" row="{{ row }}" column="{{ column }}" style="width: {{ library.unit_width }}px; height: {{ library.unit_height }}px; background-size: cover; background: url('{{ library.src }}') -{% widthratio column 1 library.unit_width %}px -{% widthratio row 1 library.unit_height %}px no-repeat;">{% widthratio row 1 column %}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        {% endfor %}
+
     </form>
 </body>
 </html>

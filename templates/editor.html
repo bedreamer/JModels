@@ -45,14 +45,6 @@
             .removeClass('active');
         });
 
-        $("#id_plus").click(function () {
-            begin_index ++;
-        });
-
-        $("#id_sub").click(function () {
-            begin_index --;
-        });
-
         let width = Number($("#id_canvas_body").css("width").slice(0, -2));
         var painter = new JPaintbord('paint', width, 800, {});
         var editor = new JEditor(painter);
@@ -77,7 +69,12 @@
         $("#menu_new_model").click(function () {
             document.ondblclick = function (ev) {
                 document.ondblclick = null;
-                editor.create_model(ev.offsetX, ev.offsetY, 80, 80, {});
+                let style = {};
+                let library = editor.painter.search_image_library_by_name("Jmodel");
+                if ( library ) {
+                    style = {library: library.id}
+                }
+                editor.create_model(ev.offsetX, ev.offsetY, 80, 80, style);
                 editor.update();
                 console.info(ev);
             }
@@ -126,19 +123,6 @@
     </div>
   </div>
   <div class="right menu">
-    <a class="item" id="id_plus">
-        <button class="ui button green">
-            <i class="save icon"></i>
-            增加
-        </button>
-    </a>
-    <a class="item" id="id_sub">
-        <button class="ui button green">
-            <i class="save icon"></i>
-            减弱
-        </button>
-    </a>
-
     <a class="item" id="id_save">
         <button class="ui button green">
             <i class="save icon"></i>

@@ -79,12 +79,6 @@ JEditor.prototype.render_model = function(ctx, model) {
         ctx.lineTo(x, y - 5 * i);
     }
     ctx.stroke();
-
-    if ( this.model_selected === model ) {
-        ctx.strokeStyle = 'red';
-        ctx.strokeRect(model.x - 5, model.y - 5, model.width + 10, model.height + 10);
-    }
-
     ctx.restore();
 
     /*
@@ -101,6 +95,8 @@ JEditor.prototype.render_model = function(ctx, model) {
  * 编辑器的绘制事件
  * */
 JEditor.prototype.render = function(ctx) {
+    ctx.save();
+
     let link_list = this.painter.links_list;
     for (let idx in link_list) {
         if ( ! link_list.hasOwnProperty(idx) ) {
@@ -143,14 +139,30 @@ JEditor.prototype.render = function(ctx) {
         if ( !this.hotlines_stack.hasOwnProperty(idx) ) {
             continue;
         }
-        let hotline = this.hotlines_stack[idx];
+        let hot_line = this.hotlines_stack[idx];
         ctx.save();
         ctx.strokeStyle = 'blue';
-        ctx.moveTo(hotline.begin_x, hotline.begin_y);
-        ctx.lineTo(hotline.end_x, hotline.end_y);
+        ctx.moveTo(hot_line.begin_x, hot_line.begin_y);
+        ctx.lineTo(hot_line.end_x, hot_line.end_y);
         ctx.stroke();
         ctx.restore();
     }
+
+    // 绘制选择的模型, 有改变模型位置的选择对象
+    for(let i = 0, length = this.change_location_models_statck.length; i < length; i ++) {
+        let model = this.change_location_models_statck[i];
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(model.x - 5, model.y - 5, model.width + 10, model.height + 10);
+    }
+
+    // 绘制选择的模型, 有改变模型大小的选择对象
+    for(let i =0, length = this.resize_models_stack.length; i < length; i ++) {
+        let model = this.resize_models_stack[i];
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(model.x - 5, model.y - 5, model.width + 10, model.height + 10);
+    }
+
+    ctx.restore();
 };
 
 
