@@ -245,14 +245,7 @@ JEditor.prototype.create_model = function(x_offset, y_offset, width, height, sty
     let name = "model_" + id;
     let model = new JModel(id, this.painter, name, x_offset, y_offset, width, height, style);
     this.painter.models_list[id] = model;
-
-    let left_anchors = this.create_anchor(model, -width/2, 0, {name: 'left'});
-    let top_anchors = this.create_anchor(model, 0, -height/2, {name: 'top'});
-    let right_anchors = this.create_anchor(model, width/2, 0, {name: 'right'});
-    let bottom_anchors = this.create_anchor(model, 0, height/2, {name: 'bottom'});
-    let center_anchors = this.create_anchor(model, 0, 0, {name: 'center'});
-
-    return [model, left_anchors, top_anchors, right_anchors, bottom_anchors, center_anchors];
+    return model;
 };
 
 /**

@@ -29,10 +29,41 @@ JLink.prototype.save = function () {
 };
 
 
+JLink.prototype.render = function (ctx) {
+    let delta_x = (this.end.x + this.end.width/2) - (this.begin.x + this.begin.width/2);
+    let delta_y = (this.end.y + this.end.height/2) - (this.begin.y + this.begin.height/2);
+
+    ctx.save();
+
+    ctx.translate(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
+    ctx.moveTo(0, 0);
+
+    let abs_delta_x = Math.abs(delta_x);
+    let abs_delta_y = Math.abs(delta_y);
+    if ( abs_delta_x >= abs_delta_y ) {
+        ctx.lineTo(delta_x, 0);
+        ctx.lineTo(delta_x, delta_y);
+    } else {
+        ctx.lineTo(0, delta_y);
+        ctx.lineTo(delta_x, delta_y);
+    }
+    ctx.stroke();
+
+    ctx.restore();
+
+    /*
+    ctx.beginPath();
+    ctx.moveTo(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
+    ctx.lineTo(this.end.x + this.end.width/2, this.end.y + this.end.height/2);
+    ctx.stroke();
+    */
+};
+
+
 /**
  * 渲染函数
  * */
-JLink.prototype.render = function (ctx) {
+JLink.prototype.render2 = function (ctx) {
     /*
      ctx.beginPath();
      ctx.moveTo(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);

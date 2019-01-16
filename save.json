@@ -4,16 +4,16 @@
       "id": 6,
       "name": "model_6",
       "painter": 1,
-      "x_offset": 224,
-      "y_offset": 151,
+      "x_offset": 141,
+      "y_offset": 338,
       "width": 80,
       "height": 80,
       "style": {
-        "library": 3,
+        "library": 4,
         "showed": true,
         "row": 0,
-        "column": 3,
-        "show_boarder": true,
+        "column": 7,
+        "show_boarder": false,
         "v_scale": 1,
         "h_scale": 1,
         "degree": 0
@@ -23,10 +23,48 @@
       "id": 12,
       "name": "model_12",
       "painter": 1,
-      "x_offset": 397,
-      "y_offset": 79,
+      "x_offset": 402,
+      "y_offset": 185,
       "width": 80,
       "height": 80,
+      "style": {
+        "library": 4,
+        "showed": true,
+        "row": 0,
+        "column": 6,
+        "show_boarder": false,
+        "v_scale": 1,
+        "h_scale": 1,
+        "degree": 0
+      }
+    },
+    {
+      "id": 18,
+      "name": "model_18",
+      "painter": 1,
+      "x_offset": 410,
+      "y_offset": 488,
+      "width": 80,
+      "height": 80,
+      "style": {
+        "library": 4,
+        "showed": true,
+        "row": 0,
+        "column": 6,
+        "show_boarder": false,
+        "v_scale": 1,
+        "h_scale": 1,
+        "degree": 0
+      }
+    },
+    {
+      "id": 24,
+      "name": "model_24",
+      "painter": 1,
+      "x_offset": 601,
+      "y_offset": 312,
+      "width": 20,
+      "height": 20,
       "style": {
         "library": 4,
         "showed": true,
@@ -37,25 +75,34 @@
         "h_scale": 1,
         "degree": 0
       }
-    },
-    {
-      "id": 18,
-      "name": "model_18",
-      "painter": 1,
-      "x_offset": 721,
-      "y_offset": 351,
-      "width": 80,
-      "height": 80,
-      "style": {
-        "library": 2,
-        "showed": true,
-        "row": 0,
-        "column": 0,
-        "show_boarder": true
-      }
     }
   ],
-  "links": [],
+  "links": [
+    {
+      "id": 26,
+      "begin": 23,
+      "end": 25,
+      "style": {}
+    },
+    {
+      "id": 27,
+      "begin": 17,
+      "end": 25,
+      "style": {}
+    },
+    {
+      "id": 28,
+      "begin": 17,
+      "end": 11,
+      "style": {}
+    },
+    {
+      "id": 29,
+      "begin": 23,
+      "end": 11,
+      "style": {}
+    }
+  ],
   "anchors": [
     {
       "id": 7,
@@ -191,6 +238,15 @@
       "style": {
         "name": "center"
       }
+    },
+    {
+      "id": 25,
+      "model": 24,
+      "x_offset": 0,
+      "y_offset": 0,
+      "style": {
+        "name": "center"
+      }
     }
   ],
   "libraries": [
@@ -214,12 +270,12 @@
     },
     {
       "row": 1,
-      "column": 7,
+      "column": 8,
       "unit_height": 100,
       "unit_width": 100,
       "id": 4,
-      "name": "告警符号图标库2",
-      "src": "/static/imgs/700x100.png"
+      "name": "告警符号图标库3",
+      "src": "/static/imgs/800x100.png"
     },
     {
       "row": 3,
