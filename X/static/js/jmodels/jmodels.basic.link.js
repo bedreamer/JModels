@@ -37,16 +37,18 @@ JLink.prototype.render = function (ctx) {
 
     ctx.translate(this.begin.x + this.begin.width/2, this.begin.y + this.begin.height/2);
     ctx.moveTo(0, 0);
+    ctx.setLineDash([5, 5]);
 
     let abs_delta_x = Math.abs(delta_x);
     let abs_delta_y = Math.abs(delta_y);
-    if ( abs_delta_x >= abs_delta_y ) {
+
+    if (abs_delta_x >= abs_delta_y && abs_delta_x > this.end.widget / 2) {
         ctx.lineTo(delta_x, 0);
-        ctx.lineTo(delta_x, delta_y);
-    } else {
+    } else if (abs_delta_y > this.end.height / 2) {
         ctx.lineTo(0, delta_y);
-        ctx.lineTo(delta_x, delta_y);
     }
+
+    ctx.lineTo(delta_x, delta_y);
     ctx.stroke();
 
     ctx.restore();
