@@ -38,6 +38,36 @@ let JModel = function (id, painter, name, x_offset, y_offset, width, height, sty
 
     // 所有的锚点都需要注册在这里
     this.anchors = {};
+
+    // 绑定的事件函数
+    // 尺寸变化回调
+    this._onresize = undefined;
+    this.onresize = function (callback) {this._onresize = callback;};
+
+    // 位置变化回调
+    this._onrelocation = undefined;
+    this.onrelocation = function (callback) {this._onrelocation = callback;};
+
+    // 光标悬停回调
+    this._onhover = undefined;
+    this.onhover = function (callback) {this._onhover = callback;};
+
+    // 光标进入回调
+    this._onmousein = undefined;
+    this.onmousein = function (callback) {this._onmousein = callback;};
+
+    // 光标退出回调
+    this._onmouseout = undefined;
+    this.onmouseout = function (callback) {this._onmouseout = callback;};
+
+    // 左键单击回调
+    this._onclick = undefined;
+    this.onclick = function (callback) {this._onclick = callback;};
+
+    // 左键双击回调
+    this._ondbclick = undefined;
+    this.ondbclick = function (callback) {this._ondbclick = callback;};
+
     return this;
 };
 
